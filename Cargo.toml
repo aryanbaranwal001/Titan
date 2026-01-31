@@ -1,6 +1,13 @@
-[package]
-name = "Titan"
-version = "0.1.0"
-edition = "2024"
+[workspace]
+members = [
+  "cli",
+  "crates/ingestion",
+  "crates/processing",
+  "crates/storage",
+  "crates/types",
+  "crates/utils",
+  "crates/tui",
+  "crates/config",
+]
 
-[dependencies]
+resolver = "2"
