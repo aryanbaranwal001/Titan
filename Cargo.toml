@@ -7,7 +7,7 @@ members = [
   "crates/types",
   "crates/utils",
   "crates/tui",
-  "crates/config",
+  "crates/settings",
   "proto-build",
 ]
 
