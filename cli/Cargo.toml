@@ -6,4 +6,4 @@ edition = "2024"
 [dependencies]
 
 [build-dependencies]
-prost-build = { path = "../prost-build" }
+proto-build = { path = "../proto-build" }
