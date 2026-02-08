@@ -4,3 +4,9 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+tonic.workspace = true
+serde.workspace = true
+reqwest.workspace = true
+proto-build = { path = "../../proto-build" }
+
+[build-dependencies]

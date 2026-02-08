@@ -1,16 +1,19 @@
+#![allow(unused)]
 use config::{Case, Config, ConfigError, Environment, File};
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct AppConfig {
-    firehose_api_key: String,
-    block: BlockFlags,
+    pub auth_endpoint: String,
+    pub endpoint_url: String,
+    pub firehose_api_key: String,
+    pub block: BlockFlags,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct BlockFlags {
-    start_block: u64,
-    end_block: u64,
+    pub start_block: u64,
+    pub end_block: u64,
 }
 
 impl AppConfig {
