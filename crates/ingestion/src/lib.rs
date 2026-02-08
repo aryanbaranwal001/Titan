@@ -1,5 +1,8 @@
 #![allow(unused)]
+use prost::Message;
+
 use proto_build::sf::ethereum::r#type::v2::Block;
+use proto_build::sf::firehose::v2::Request as FirehoseRequest;
 use proto_build::sf::firehose::v2::stream_client::StreamClient;
 
 use serde::{Deserialize, Serialize};
@@ -36,7 +39,6 @@ impl Interceptor for AuthInterceptor {
     }
 }
 
-// .post("https://auth.streamingfast.io/v1/auth/issue")
 pub async fn get_firehose_token(
     api_key: String,
     auth_endpoint: &str,
@@ -56,7 +58,6 @@ pub async fn get_firehose_token(
     Ok(auth_data.token)
 }
 
-// let endpoint_url = "https://mainnet.eth.streamingfast.io:443";
 type IngestorClient = StreamClient<InterceptedService<Channel, AuthInterceptor>>;
 pub async fn connect_to_firehose(
     token: String,
@@ -76,8 +77,42 @@ pub async fn connect_to_firehose(
     Ok(client)
 }
 
+pub async fn stream_blocks(mut client: IngestorClient) -> Result<(), Box<dyn std::error::Error>> {
+    let request = FirehoseRequest {
+        start_block_num: 20_375_440,
+        stop_block_num: 20_375_442,
+        final_blocks_only: true,
+        // cursors are for resuming a stream; leave empty for a new start
+        cursor: "".to_string(),
+        // We will add filters (transforms) in a later step
+        transforms: vec![],
+    };
+
+    // This initiates the gRPC streaming call
+    let mut stream = client.blocks(request).await?.into_inner();
+
+    let mut block_no: u32 = 0;
+    while let Some(response) = stream.message().await? {
+        // 1. Firehose sends a 'block' envelope
+        if let Some(any_block) = response.block {
+            match Block::decode(&any_block.value[..]) {
+                Ok(decoded_block) => {
+                    println!("Block: {:#?}", decoded_block);
+                    // 3. Manual stop check (optional: removing for now)
+                    // Firehose servers sometimes send a few extra blocks for reorg safety,
+                    // so we break manually when we hit our target.
+                }
+                Err(e) => eprintln!("Decoding error: {}", e),
+            }
+            block_no += 1;
+        }
+    }
+    println!("blocks printed: {}", block_no);
+    Ok(())
+}
+
 // my notes: this has nothing to do with the codebase
 // Checkout the following for once
-// see how box dyn std::error::Error works
+// how box dyn std::error::Error exactly works, apart from trait objects
 // how does .into works
 // see how from_str trait works

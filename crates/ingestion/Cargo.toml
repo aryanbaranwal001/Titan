@@ -5,8 +5,10 @@ edition = "2024"
 
 [dependencies]
 tonic.workspace = true
+prost.workspace = true
 serde.workspace = true
 reqwest.workspace = true
+hex.workspace = true
 proto-build = { path = "../../proto-build" }
 
 [build-dependencies]

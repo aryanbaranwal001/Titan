@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 settings = { path = "../crates/settings/" }
-
 dotenv.workspace = true
+tokio.workspace = true
+ingestion = { path = "../crates/ingestion/" }
 [build-dependencies]
-proto-build = { path = "../proto-build" }
