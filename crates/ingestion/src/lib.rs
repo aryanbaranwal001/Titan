@@ -39,7 +39,18 @@ impl Interceptor for AuthInterceptor {
     }
 }
 
-pub async fn get_firehose_token(
+/// Consumes Firehose API key for bearer token.
+///
+/// Sends a POST request to the specified `auth_endpoint` with the provided
+/// Firehose `api_key`. On success, returns the bearer token used for gRPC stream authorization.
+///
+/// # Errors
+///
+/// Returns an error if:
+/// * The HTTP request fails
+/// * Server returns a non-success status code
+/// * Response body cannot be deserialized into an [`AuthResponse`].
+pub async fn get_bearer_token(
     api_key: String,
     auth_endpoint: &str,
 ) -> Result<String, Box<dyn std::error::Error>> {
