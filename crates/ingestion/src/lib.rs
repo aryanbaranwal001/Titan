@@ -110,9 +110,3 @@ pub async fn stream_blocks(mut client: IngestorClient) -> Result<(), Box<dyn std
     println!("blocks printed: {}", block_no);
     Ok(())
 }
-
-// my notes: this has nothing to do with the codebase
-// Checkout the following for once
-// how box dyn std::error::Error exactly works, apart from trait objects
-// how does .into works
-// see how from_str trait works
