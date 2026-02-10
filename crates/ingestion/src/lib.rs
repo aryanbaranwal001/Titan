@@ -70,11 +70,12 @@ pub async fn get_bearer_token(
 }
 
 type IngestorClient = StreamClient<InterceptedService<Channel, AuthInterceptor>>;
+
 pub async fn connect_to_firehose(
     token: String,
-    endpoint_url: &'static str,
+    endpoint_url: &str,
 ) -> Result<IngestorClient, Box<dyn std::error::Error>> {
-    let endpoint = Endpoint::from_static(endpoint_url)
+    let endpoint = Endpoint::from_shared(endpoint_url.to_string())?
         .tls_config(ClientTlsConfig::new().with_webpki_roots())?;
 
     let channel = endpoint.connect().await?;
