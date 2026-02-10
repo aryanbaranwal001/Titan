@@ -45,8 +45,6 @@ impl Interceptor for AuthInterceptor {
 /// Firehose `api_key`. On success, returns the bearer token used for gRPC stream authorization.
 ///
 /// # Errors
-///
-/// Returns an error if:
 /// * The HTTP request fails
 /// * Server returns a non-success status code
 /// * Response body cannot be deserialized into an [`AuthResponse`].
@@ -69,9 +67,20 @@ pub async fn get_bearer_token(
     Ok(auth_data.token)
 }
 
-type IngestorClient = StreamClient<InterceptedService<Channel, AuthInterceptor>>;
+pub type IngestorClient = StreamClient<InterceptedService<Channel, AuthInterceptor>>;
 
-pub async fn connect_to_firehose(
+/// Creates a TLS-enabled gRPC connection to the Firehose service and returns a
+/// configured [`IngestorClient`].
+///
+/// The client is built from a `endpoint_url`, uses webpki-roots CAs for
+/// TLS, attaches an authentication interceptor with provided bearer `token`,
+/// and enables gzip compression for requests and responses.
+///
+/// # Errors
+/// * The `endpoint_url` is malformed or invalid.
+/// * TLS initialization or root certificate loading fails.
+/// * The initial TCP/TLS handshake with the remote host times out.
+pub async fn get_ingestor_client(
     token: String,
     endpoint_url: &str,
 ) -> Result<IngestorClient, Box<dyn std::error::Error>> {
