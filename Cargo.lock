@@ -205,7 +205,7 @@ version = "0.1.0"
 dependencies = [
  "dotenv",
  "futures-util",
- "ingestion",
+ "ingestor",
  "settings",
  "tokio",
 ]
@@ -862,7 +862,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "ingestion"
+name = "ingestor"
 version = "0.1.0"
 dependencies = [
  "async-stream",

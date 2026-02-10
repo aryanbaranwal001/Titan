@@ -1,7 +1,7 @@
 [workspace]
 members = [
   "cli",
-  "crates/ingestion",
+  "crates/ingestor",
   "crates/processing",
   "crates/storage",
   "crates/types",

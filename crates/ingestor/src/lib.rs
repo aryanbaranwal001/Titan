@@ -59,7 +59,7 @@ impl Interceptor for AuthInterceptor {
 /// * The HTTP request fails
 /// * Server returns a non-success status code
 /// * Response body cannot be deserialized into an [`AuthResponse`].
-pub async fn get_bearer_token(
+pub async fn bearer_token(
     api_key: String,
     auth_endpoint: &str,
 ) -> Result<String, Box<dyn std::error::Error>> {
@@ -91,7 +91,7 @@ pub type IngestorClient = StreamClient<InterceptedService<Channel, AuthIntercept
 /// * The `endpoint_url` is malformed or invalid.
 /// * TLS initialization or root certificate loading fails.
 /// * The initial TCP/TLS handshake with the remote host times out.
-pub async fn get_ingestor_client(
+pub async fn build_client(
     token: String,
     endpoint_url: &str,
 ) -> Result<IngestorClient, Box<dyn std::error::Error>> {
@@ -109,7 +109,7 @@ pub async fn get_ingestor_client(
     Ok(client)
 }
 
-pub async fn get_blocks(
+pub async fn stream_blocks(
     mut client: IngestorClient,
     config: AppConfig,
 ) -> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
@@ -134,3 +134,12 @@ pub async fn get_blocks(
         }
     }
 }
+
+// my notes
+// 1. what happens when we move a field out of a struct, what happens with that struct?
+// 2. look into how map_err is working, should be early to implement
+//
+// my todos
+// 1. make docs for get_blocks
+// 2. rename all get_fns
+// 3. rename ingestion to ingestor, something more feasible/intuitive
