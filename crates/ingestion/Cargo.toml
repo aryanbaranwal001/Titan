@@ -10,5 +10,8 @@ serde.workspace = true
 reqwest.workspace = true
 hex.workspace = true
 proto-build = { path = "../../proto-build" }
+settings = { path = "../settings/" }
+async-stream.workspace = true
+futures-util.workspace = true
 
 [build-dependencies]

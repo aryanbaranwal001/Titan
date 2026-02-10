@@ -5,9 +5,14 @@ use proto_build::sf::ethereum::r#type::v2::Block;
 use proto_build::sf::firehose::v2::Request as FirehoseRequest;
 use proto_build::sf::firehose::v2::stream_client::StreamClient;
 
+use async_stream::try_stream;
+use futures_util::Stream;
+
 use serde::{Deserialize, Serialize};
+use settings::AppConfig;
 use std::str::FromStr;
 
+use tonic::codec::CompressionEncoding::Gzip;
 use tonic::service::{Interceptor, interceptor::InterceptedService};
 use tonic::transport::{Channel, ClientTlsConfig, Endpoint};
 use tonic::{Request, Status, metadata::MetadataValue};
@@ -98,42 +103,34 @@ pub async fn get_ingestor_client(
     let interceptor = AuthInterceptor { token };
 
     let client = StreamClient::with_interceptor(channel, interceptor)
-        .accept_compressed(tonic::codec::CompressionEncoding::Gzip)
-        .send_compressed(tonic::codec::CompressionEncoding::Gzip);
+        .accept_compressed(Gzip)
+        .send_compressed(Gzip);
 
     Ok(client)
 }
 
-pub async fn stream_blocks(mut client: IngestorClient) -> Result<(), Box<dyn std::error::Error>> {
+pub async fn get_blocks(
+    mut client: IngestorClient,
+    config: AppConfig,
+) -> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
     let request = FirehoseRequest {
-        start_block_num: 20_375_440,
-        stop_block_num: 20_375_442,
-        final_blocks_only: true,
-        // cursors are for resuming a stream; leave empty for a new start
+        start_block_num: config.block.start_block,
+        stop_block_num: config.block.end_block,
+        final_blocks_only: config.block.final_blocks_only,
         cursor: "".to_string(),
-        // We will add filters (transforms) in a later step
         transforms: vec![],
     };
 
-    // This initiates the gRPC streaming call
-    let mut stream = client.blocks(request).await?.into_inner();
+    try_stream! {
+        let mut stream = client.blocks(request).await?.into_inner();
 
-    let mut block_no: u32 = 0;
-    while let Some(response) = stream.message().await? {
-        // 1. Firehose sends a 'block' envelope
-        if let Some(any_block) = response.block {
-            match Block::decode(&any_block.value[..]) {
-                Ok(decoded_block) => {
-                    println!("Block: {:#?}", decoded_block);
-                    // 3. Manual stop check (optional: removing for now)
-                    // Firehose servers sometimes send a few extra blocks for reorg safety,
-                    // so we break manually when we hit our target.
-                }
-                Err(e) => eprintln!("Decoding error: {}", e),
+        while let Some(response) = stream.message().await? {
+            if let Some(any_block) = response.block {
+                let decoded_block = Block::decode(&any_block.value[..])
+                    .map_err(|e| format!("Decoding error: {}", e))?;
+
+                yield decoded_block;
             }
-            block_no += 1;
         }
     }
-    println!("blocks printed: {}", block_no);
-    Ok(())
 }

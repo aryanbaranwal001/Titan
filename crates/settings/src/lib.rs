@@ -12,8 +12,9 @@ pub struct AppConfig {
 
 #[derive(Deserialize, Debug)]
 pub struct BlockFlags {
-    pub start_block: u64,
+    pub start_block: i64,
     pub end_block: u64,
+    pub final_blocks_only: bool,
 }
 
 impl AppConfig {

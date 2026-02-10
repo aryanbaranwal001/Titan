@@ -2,5 +2,6 @@ auth_endpoint = "https://auth.streamingfast.io/v1/auth/issue"
 endpoint_url = "https://mainnet.eth.streamingfast.io:443"
 
 [block]
+final_blocks_only = true
 start_block = 1
 end_block = 2
