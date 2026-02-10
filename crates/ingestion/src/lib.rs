@@ -26,6 +26,12 @@ pub struct AuthInterceptor {
     token: String,
 }
 
+/// Injects an authorization header into every outgoing gRPC request.
+///
+/// This implementation inserts the bearer 'token' into the metadata of request.
+///
+/// # Errors
+/// Returns `Status::unauthenticated` if the token is ill formatted for gRPC metadata
 impl Interceptor for AuthInterceptor {
     fn call(&mut self, mut request: Request<()>) -> Result<Request<()>, Status> {
         let token_val = format!("Bearer {}", self.token);
