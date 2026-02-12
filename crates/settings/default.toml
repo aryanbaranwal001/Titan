@@ -2,6 +2,6 @@ auth_endpoint = "https://auth.streamingfast.io/v1/auth/issue"
 endpoint_url = "https://mainnet.eth.streamingfast.io:443"
 
 [block]
-start_block = 24_000_001
-end_block = 24_000_010
+start_block = 24_000_001 # this range is specifically chosen to ensure indexer works with latest fork of ethereum, and ofc because the number looks nice
+end_block = 24_000_001
 final_blocks_only = true
