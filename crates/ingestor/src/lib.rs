@@ -104,7 +104,8 @@ pub async fn build_client(
 
     let client = StreamClient::with_interceptor(channel, interceptor)
         .accept_compressed(Gzip)
-        .send_compressed(Gzip);
+        .send_compressed(Gzip)
+        .max_decoding_message_size(256 * 1024 * 1024);
 
     Ok(client)
 }
