@@ -2,7 +2,7 @@
 members = [
   "cli",
   "crates/ingestor",
-  "crates/processing",
+  "crates/engine",
   "crates/storage",
   "crates/types",
   "crates/utils",
