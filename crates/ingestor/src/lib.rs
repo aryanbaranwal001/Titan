@@ -109,6 +109,16 @@ pub async fn build_client(
     Ok(client)
 }
 
+/// Streams and decodes blocks from the Firehose gRPC endpoint per [`AppConfig`]
+///
+/// It establishes an asynchronous connection, processes raw block messages from the server,
+/// and yields a stream of decoded [`Block`] results. The stream automatically handles
+/// Protobuf deserialization and propagates network or decoding errors.
+///
+/// # Errors
+/// * The gRPC block request fails to initialize.
+/// * The stream is interrupted by network issues.
+/// * The raw block data fails to decode into the [`Block`] type.
 pub async fn stream_blocks(
     mut client: IngestorClient,
     config: AppConfig,
@@ -125,8 +135,8 @@ pub async fn stream_blocks(
         let mut stream = client.blocks(request).await?.into_inner();
 
         while let Some(response) = stream.message().await? {
-            if let Some(any_block) = response.block {
-                let decoded_block = Block::decode(&any_block.value[..])
+            if let Some(block) = response.block {
+                let decoded_block = Block::decode(&block.value[..])
                     .map_err(|e| format!("Decoding error: {}", e))?;
 
                 yield decoded_block;
@@ -137,9 +147,7 @@ pub async fn stream_blocks(
 
 // my notes
 // 1. what happens when we move a field out of a struct, what happens with that struct?
-// 2. look into how map_err is working, should be early to implement
 //
 // my todos
 // 1. make docs for get_blocks
-// 2. rename all get_fns
-// 3. rename ingestion to ingestor, something more feasible/intuitive
+// 4. add progress to roadmap
