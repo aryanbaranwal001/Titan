@@ -3,3 +3,172 @@ endpoint_url = "https://mainnet.eth.streamingfast.io:443"
 start_block = 24_000_001                                      # this range is specifically chosen to ensure indexer works with latest fork of ethereum, and ofc because the number looks nice
 end_block = 24_000_001
 final_blocks_only = true
+
+# Database Inclusion Settings (Hierarchical)
+# Set to 'true' to include the field/message, 'false' to exclude.
+
+[block]
+hash = false         # The unique 32-byte hash identifying the block
+number = false       # The block height (index) in the blockchain
+size = false         # Total size of the block in bytes
+detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
+ver = false          # Version of the block data structure
+system_calls = false # List of Call messages (system-level)
+
+[block.header]
+enabled = false            # Toggle entire block header object
+parent_hash = false        # Hash of the previous block
+uncle_hash = false         # Hash of the uncles (ommer) list
+coinbase = false           # Address of the miner/validator
+state_root = false         # Root of the state trie
+transactions_root = false  # Root of the transaction trie
+receipt_root = false       # Root of the transaction receipt trie
+logs_bloom = false         # Bloom filter for log searching
+difficulty = false         # Mining difficulty (BigInt)
+total_difficulty = false   # Cumulative difficulty (BigInt, deprecated)
+number = false             # Duplicate of block height for header context
+gas_limit = false          # Maximum gas allowed in this block
+gas_used = false           # Total gas actually consumed
+timestamp = false          # Unix timestamp (google.protobuf.Timestamp)
+extra_data = false         # Arbitrary data field
+mix_hash = false           # PoW hash or RANDAO
+nonce = false              # Proof-of-work seal
+hash = false               # Block hash (calculated from header)
+base_fee_per_gas = false   # Minimum fee per gas (BigInt, EIP-1559)
+withdrawals_root = false   # Root of the beacon chain withdrawals trie
+tx_dependency = false      # Parallel execution dependency (Uint64NestedArray)
+blob_gas_used = false      # Gas consumed by EIP-4844 blobs
+excess_blob_gas = false    # Running total of unused blob gas capacity
+parent_beacon_root = false # Root of the parent beacon block
+requests_hash = false      # Hash of execution layer requests
+
+[block.uncles]
+enabled = false # Repeated BlockHeader: Toggle inclusion of ommer headers
+
+[block.transaction_traces]
+enabled = false                  # Toggle inclusion of transaction execution traces
+to = false                       # Destination address
+nonce = false                    # Sender's transaction count
+gas_price = false                # Price per gas unit (BigInt)
+gas_limit = false                # Maximum gas allowed
+value = false                    # Amount of Ether sent (BigInt)
+input = false                    # Transaction data/bytecode
+v = false                        # Recovery ID component
+r = false                        # Signature component R
+s = false                        # Signature component S
+gas_used = false                 # Total gas consumed
+type = false                     # Transaction type (Legacy, Dynamic, Blob, etc.)
+max_fee_per_gas = false          # Max total fee per gas (BigInt)
+max_priority_fee_per_gas = false # Max tip to miner (BigInt)
+index = false                    # Position within the block
+hash = false                     # Unique transaction hash
+from = false                     # Address of the sender
+return_data = false              # Data returned by top-level call
+public_key = false               # Recovered public key of the signer
+begin_ordinal = false            # Execution ordering: start position
+end_ordinal = false              # Execution ordering: end position
+status = false                   # Final status (Succeeded, Failed, Reverted)
+blob_gas = false                 # Max gas for EIP-4844 blobs
+blob_gas_fee_cap = false         # Max fee for blob gas (BigInt)
+blob_hashes = false              # List of versioned hashes for blobs
+
+[block.transaction_traces.set_code_authorizations]
+enabled = false   # Toggle EIP-7702 SetCode authorizations
+discarded = false # If authorization was discarded
+chain_id = false  # Chain ID for authorization
+address = false   # Address of the delegator
+nonce = false     # Nonce of the delegator
+v = false         # Signature V
+r = false         # Signature R
+s = false         # Signature S
+authority = false # Recovered authority
+
+[block.transaction_traces.receipt]
+enabled = false             # Toggle transaction receipt
+state_root = false          # Post-transaction state root
+cumulative_gas_used = false # Total gas used in block so far
+logs_bloom = false          # Bloom filter for logs
+blob_gas_used = false       # Blob gas used by this transaction
+blob_gas_price = false      # Price for blob gas (BigInt)
+
+[block.transaction_traces.receipt.logs]
+enabled = false    # Toggle event logs
+address = false    # Contract address
+topics = false     # Indexed event parameters
+data = false       # Non-indexed event parameters
+index = false      # Index within the transaction
+blockIndex = false # Index within the block
+ordinal = false    # Global ordering position
+
+[block.transaction_traces.calls]
+enabled = false              # Toggle internal calls
+index = false                # Call index
+parent_index = false         # Parent call index
+depth = false                # Call stack depth
+call_type = false            # Type (CALL, DELEGATE, CREATE, etc.)
+caller = false               # Address initiating the call
+address = false              # Target address
+address_delegates_to = false # Effective address for DELEGATECALL
+value = false                # Ether sent (BigInt)
+gas_limit = false            # Gas allocated
+gas_consumed = false         # Gas used
+return_data = false          # Data returned
+input = false                # Call data
+executed_code = false        # If code was run
+suicide = false              # If SELFDESTRUCT occurred
+keccak_preimages = false     # Map of hash -> preimage
+status_failed = false        # If execution failed
+status_reverted = false      # If execution reverted
+failure_reason = false       # Error message
+state_reverted = false       # If state changes rolled back
+begin_ordinal = false        # Start order
+end_ordinal = false          # End order
+
+[block.transaction_traces.calls.storage_changes]
+enabled = false   # Toggle storage slot modifications
+address = false   # Address modified
+key = false       # Storage key
+old_value = false # Value before
+new_value = false # Value after
+ordinal = false   # Order
+
+[block.transaction_traces.calls.balance_changes]
+enabled = false   # Toggle Ether balance movements (BalanceChange)
+address = false   # Address changed
+old_value = false # BigInt before
+new_value = false # BigInt after
+reason = false    # Reason enum
+ordinal = false   # Order
+
+[block.transaction_traces.calls.nonce_changes]
+enabled = false   # Toggle account nonce updates (NonceChange)
+address = false   # Address changed
+old_value = false # Nonce before
+new_value = false # Nonce after
+ordinal = false   # Order
+
+[block.transaction_traces.calls.gas_changes]
+enabled = false   # Toggle gas consumption details (GasChange)
+old_value = false # Gas before
+new_value = false # Gas after
+reason = false    # Reason enum
+ordinal = false   # Order
+
+[block.balance_changes]
+enabled = false # Repeated BalanceChange: Top-level movements (rewards, etc.)
+
+[block.code_changes]
+enabled = false  # Toggle contract code updates (CodeChange)
+address = false  # Address changed
+old_hash = false # Previous code hash
+old_code = false # Previous bytecode
+new_hash = false # New code hash
+new_code = false # New bytecode
+ordinal = false  # Order
+
+[block.withdrawals]
+enabled = false         # Toggle beacon chain withdrawals
+index = false           # Withdrawal index
+validator_index = false # Validator ID
+address = false         # Recipient address
+amount = false          # Amount (Gwei)
