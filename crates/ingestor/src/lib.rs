@@ -125,9 +125,9 @@ pub async fn stream_blocks(
     config: AppConfig,
 ) -> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
     let request = FirehoseRequest {
-        start_block_num: config.block.start_block,
-        stop_block_num: config.block.end_block,
-        final_blocks_only: config.block.final_blocks_only,
+        start_block_num: config.start_block,
+        stop_block_num: config.end_block,
+        final_blocks_only: config.final_blocks_only,
         cursor: "".to_string(),
         transforms: vec![],
     };
@@ -150,5 +150,3 @@ pub async fn stream_blocks(
 // 1. what happens when we move a field out of a struct, what happens with that struct?
 //
 // my todos
-// 1. make docs for get_blocks
-// 4. add progress to roadmap
