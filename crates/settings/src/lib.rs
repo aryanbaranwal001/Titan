@@ -2,6 +2,14 @@
 use config::{Case, Config, ConfigError, Environment, File};
 use serde::Deserialize;
 
+// NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
+// the toggle structure used to select which fields to include
+// remains the same. This toggle determines whether we fetch
+// the full BlockHeader data or only specific fields.
+//
+// Examples include: block.header whose actual data is BlockHeader, and block.uncles whose
+// actual data is Vec<BlockHeader>
+
 #[derive(Deserialize, Debug)]
 pub struct AppConfig {
     pub auth_endpoint: String,
@@ -24,7 +32,7 @@ pub struct Block {
 
     pub header: BlockHeader,
     pub system_calls: Calls,
-    pub uncles: EnabledOnly,
+    pub uncles: BlockHeader,
     pub transaction_traces: TransactionTraces,
     pub balance_changes: EnabledOnly,
     pub code_changes: CodeChanges,

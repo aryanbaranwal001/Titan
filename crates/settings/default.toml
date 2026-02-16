@@ -14,6 +14,8 @@ size = false         # Total size of the block in bytes
 detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
 ver = false          # Version of the block data structure
 
+
+# Block Header
 [block.header]
 enabled = false            # Toggle entire block header object
 parent_hash = false        # Hash of the previous block
@@ -41,6 +43,7 @@ excess_blob_gas = false    # Running total of unused blob gas capacity
 parent_beacon_root = false # Root of the parent beacon block
 requests_hash = false      # Hash of execution layer requests
 
+# Block System Calls
 [block.system_calls]
 enabled = false              # Toggle internal calls
 index = false                # Call index
