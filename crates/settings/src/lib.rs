@@ -10,6 +10,7 @@ pub struct AppConfig {
     pub start_block: i64,
     pub end_block: u64,
     pub final_blocks_only: bool,
+    // block configs
     pub block: Block,
 }
 
@@ -20,8 +21,9 @@ pub struct Block {
     pub size: bool,
     pub detail_level: bool,
     pub ver: bool,
-    pub system_calls: bool,
+
     pub header: BlockHeader,
+    pub system_calls: Calls,
     pub uncles: EnabledOnly,
     pub transaction_traces: TransactionTraces,
     pub balance_changes: EnabledOnly,
@@ -89,7 +91,6 @@ pub struct TransactionTraces {
     pub calls: Calls,
     pub set_code_authorizations: EnabledOnly,
 }
-
 #[derive(Deserialize, Debug, Default)]
 pub struct Receipt {
     pub enabled: bool,
@@ -100,7 +101,6 @@ pub struct Receipt {
     pub blob_gas_price: bool,
     pub logs: EnabledOnly,
 }
-
 #[derive(Deserialize, Debug, Default)]
 pub struct Calls {
     pub enabled: bool,
@@ -130,7 +130,6 @@ pub struct Calls {
     pub nonce_changes: EnabledOnly,
     pub gas_changes: EnabledOnly,
 }
-
 #[derive(Deserialize, Debug, Default)]
 pub struct CodeChanges {
     pub enabled: bool,
@@ -141,7 +140,6 @@ pub struct CodeChanges {
     pub new_code: bool,
     pub ordinal: bool,
 }
-
 #[derive(Deserialize, Debug, Default)]
 pub struct Withdrawals {
     pub enabled: bool,
@@ -150,12 +148,10 @@ pub struct Withdrawals {
     pub address: bool,
     pub amount: bool,
 }
-
 #[derive(Deserialize, Debug, Default)]
 pub struct EnabledOnly {
     pub enabled: bool,
 }
-
 impl AppConfig {
     pub fn new() -> Result<Self, ConfigError> {
         Config::builder()

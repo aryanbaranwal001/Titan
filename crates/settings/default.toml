@@ -13,7 +13,6 @@ number = false       # The block height (index) in the blockchain
 size = false         # Total size of the block in bytes
 detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
 ver = false          # Version of the block data structure
-system_calls = false # List of Call messages (system-level)
 
 [block.header]
 enabled = false            # Toggle entire block header object
@@ -41,6 +40,61 @@ blob_gas_used = false      # Gas consumed by EIP-4844 blobs
 excess_blob_gas = false    # Running total of unused blob gas capacity
 parent_beacon_root = false # Root of the parent beacon block
 requests_hash = false      # Hash of execution layer requests
+
+[block.system_calls]
+enabled = false              # Toggle internal calls
+index = false                # Call index
+parent_index = false         # Parent call index
+depth = false                # Call stack depth
+call_type = false            # Type (CALL, DELEGATE, CREATE, etc.)
+caller = false               # Address initiating the call
+address = false              # Target address
+address_delegates_to = false # Effective address for DELEGATECALL
+value = false                # Ether sent (BigInt)
+gas_limit = false            # Gas allocated
+gas_consumed = false         # Gas used
+return_data = false          # Data returned
+input = false                # Call data
+executed_code = false        # If code was run
+suicide = false              # If SELFDESTRUCT occurred
+keccak_preimages = false     # Map of hash -> preimage
+status_failed = false        # If execution failed
+status_reverted = false      # If execution reverted
+failure_reason = false       # Error message
+state_reverted = false       # If state changes rolled back
+begin_ordinal = false        # Start order
+end_ordinal = false          # End order
+
+[block.system_calls.storage_changes]
+enabled = false   # Toggle storage slot modifications
+address = false   # Address modified
+key = false       # Storage key
+old_value = false # Value before
+new_value = false # Value after
+ordinal = false   # Order
+
+[block.system_calls.balance_changes]
+enabled = false   # Toggle Ether balance movements (BalanceChange)
+address = false   # Address changed
+old_value = false # BigInt before
+new_value = false # BigInt after
+reason = false    # Reason enum
+ordinal = false   # Order
+
+[block.system_calls.nonce_changes]
+enabled = false   # Toggle account nonce updates (NonceChange)
+address = false   # Address changed
+old_value = false # Nonce before
+new_value = false # Nonce after
+ordinal = false   # Order
+
+[block.system_calls.gas_changes]
+enabled = false   # Toggle gas consumption details (GasChange)
+old_value = false # Gas before
+new_value = false # Gas after
+reason = false    # Reason enum
+ordinal = false   # Order
+
 
 [block.uncles]
 enabled = false # Repeated BlockHeader: Toggle inclusion of ommer headers
@@ -99,6 +153,7 @@ data = false       # Non-indexed event parameters
 index = false      # Index within the transaction
 blockIndex = false # Index within the block
 ordinal = false    # Global ordering position
+
 
 [block.transaction_traces.calls]
 enabled = false              # Toggle internal calls
