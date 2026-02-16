@@ -213,7 +213,12 @@ reason = false    # Reason enum
 ordinal = false   # Order
 
 [block.balance_changes]
-enabled = false # Repeated BalanceChange: Top-level movements (rewards, etc.)
+enabled = false   # Toggle Ether balance movements (BalanceChange)
+address = false   # Address changed
+old_value = false # BigInt before
+new_value = false # BigInt after
+reason = false    # Reason enum
+ordinal = false   # Order
 
 [block.code_changes]
 enabled = false  # Toggle contract code updates (CodeChange)

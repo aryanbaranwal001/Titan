@@ -34,7 +34,7 @@ pub struct Block {
     pub system_calls: Calls,
     pub uncles: BlockHeader,
     pub transaction_traces: TransactionTraces,
-    pub balance_changes: EnabledOnly,
+    pub balance_changes: BalanceChanges,
     pub code_changes: CodeChanges,
     pub withdrawals: Withdrawals,
 }
@@ -134,7 +134,7 @@ pub struct Calls {
     pub begin_ordinal: bool,
     pub end_ordinal: bool,
     pub storage_changes: EnabledOnly,
-    pub balance_changes: EnabledOnly,
+    pub balance_changes: BalanceChanges,
     pub nonce_changes: EnabledOnly,
     pub gas_changes: EnabledOnly,
 }
@@ -160,6 +160,18 @@ pub struct Withdrawals {
 pub struct EnabledOnly {
     pub enabled: bool,
 }
+
+#[derive(Deserialize, Debug, Default)]
+#[serde(default)]
+pub struct BalanceChanges {
+    pub enabled: bool,
+    pub address: bool,
+    pub old_value: bool,
+    pub new_value: bool,
+    pub reason: bool,
+    pub ordinal: bool,
+}
+
 impl AppConfig {
     pub fn new() -> Result<Self, ConfigError> {
         Config::builder()
