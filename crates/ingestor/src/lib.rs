@@ -9,7 +9,7 @@ use async_stream::try_stream;
 use futures_util::Stream;
 
 use serde::{Deserialize, Serialize};
-use settings::AppConfig;
+use settings::{AppConfig, BoxBlockErr};
 use std::str::FromStr;
 
 use tonic::codec::CompressionEncoding::Gzip;

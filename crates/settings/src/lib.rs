@@ -1,5 +1,6 @@
 #![allow(unused)]
 use config::{Case, Config, ConfigError, Environment, File};
+use proto_build::sf::ethereum::r#type::v2::Block;
 use serde::Deserialize;
 
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
@@ -19,11 +20,37 @@ pub struct AppConfig {
     pub end_block: u64,
     pub final_blocks_only: bool,
     // block configs
-    pub block: Block,
+    pub block: BlockCfg,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedBlock {
+    pub hash: Option<Vec<u8>>,
+    pub number: Option<u64>,
+    // pub size: Option<u64>,
+    // pub detail_level: Option<DetailLevel>,
+}
+
+#[derive(Deserialize, Debug)]
+pub enum DetailLevel {
+    Base,
+    Extended,
+}
+pub type BoxBlockErr = Box<dyn std::error::Error + Send + Sync>;
+
+impl AppConfig {
+    pub async fn extract(self, block: Block) -> Result<ExtractedBlock, BoxBlockErr> {
+        let cfg = self.block;
+        let extracted_block = ExtractedBlock {
+            hash: if cfg.hash { Some(block.hash) } else { None },
+            number: if cfg.number { Some(block.number) } else { None },
+        };
+        Ok(extracted_block)
+    }
 }
 
 #[derive(Deserialize, Debug, Default)]
-pub struct Block {
+pub struct BlockCfg {
     pub hash: bool,
     pub number: bool,
     pub size: bool,

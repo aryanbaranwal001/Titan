@@ -7,3 +7,4 @@ edition = "2024"
 config.workspace = true
 serde.workspace = true
 dotenv.workspace = true
+proto-build = { path = "../../proto-build/" }
