@@ -204,7 +204,6 @@ name = "cli"
 version = "0.1.0"
 dependencies = [
  "dotenv",
- "futures-util",
  "ingestor",
  "settings",
  "tokio",

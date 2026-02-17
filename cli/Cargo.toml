@@ -7,5 +7,6 @@ edition = "2024"
 settings = { path = "../crates/settings/" }
 dotenv.workspace = true
 tokio.workspace = true
-ingestion = { path = "../crates/ingestion/" }
+ingestor = { path = "../crates/ingestor/" }
+
 [build-dependencies]
