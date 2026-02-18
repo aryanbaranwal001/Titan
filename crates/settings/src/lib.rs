@@ -27,8 +27,9 @@ pub struct AppConfig {
 pub struct ExtractedBlock {
     pub hash: Option<Vec<u8>>,
     pub number: Option<u64>,
-    // pub size: Option<u64>,
-    // pub detail_level: Option<DetailLevel>,
+    pub size: Option<u64>,
+    pub detail_level: Option<DetailLevel>,
+    pub ver: Option<i32>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -39,11 +40,22 @@ pub enum DetailLevel {
 pub type BoxBlockErr = Box<dyn std::error::Error + Send + Sync>;
 
 impl AppConfig {
-    pub async fn extract(self, block: Block) -> Result<ExtractedBlock, BoxBlockErr> {
-        let cfg = self.block;
+    pub async fn extract(&self, block: Block) -> Result<ExtractedBlock, BoxBlockErr> {
+        let cfg = &self.block;
         let extracted_block = ExtractedBlock {
             hash: if cfg.hash { Some(block.hash) } else { None },
             number: if cfg.number { Some(block.number) } else { None },
+            size: if cfg.size { Some(block.size) } else { None },
+            detail_level: if cfg.detail_level {
+                match block.detail_level {
+                    0 => Some(DetailLevel::Extended),
+                    1 => Some(DetailLevel::Base),
+                    _ => Err("Invalid DetailLevel")?,
+                }
+            } else {
+                None
+            },
+            ver: if cfg.size { Some(block.ver) } else { None },
         };
         Ok(extracted_block)
     }
@@ -56,14 +68,13 @@ pub struct BlockCfg {
     pub size: bool,
     pub detail_level: bool,
     pub ver: bool,
-
-    pub header: BlockHeader,
-    pub system_calls: Calls,
-    pub uncles: BlockHeader,
-    pub transaction_traces: TransactionTraces,
-    pub balance_changes: BalanceChanges,
-    pub code_changes: CodeChanges,
-    pub withdrawals: Withdrawals,
+    // pub header: BlockHeader,
+    // pub system_calls: Calls,
+    // pub uncles: BlockHeader,
+    // pub transaction_traces: TransactionTraces,
+    // pub balance_changes: BalanceChanges,
+    // pub code_changes: CodeChanges,
+    // pub withdrawals: Withdrawals,
 }
 
 #[derive(Deserialize, Debug, Default)]

@@ -122,7 +122,7 @@ pub async fn build_client(
 /// * The raw block data fails to decode into the [`Block`] type.
 pub async fn stream_blocks(
     mut client: IngestorClient,
-    config: AppConfig,
+    config: &AppConfig,
 ) -> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
     let request = FirehoseRequest {
         start_block_num: config.start_block,

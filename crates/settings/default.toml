@@ -8,11 +8,11 @@ final_blocks_only = true
 # Set to 'true' to include the field/message, 'false' to exclude.
 
 [block]
-hash = false         # The unique 32-byte hash identifying the block
-number = false       # The block height (index) in the blockchain
-size = false         # Total size of the block in bytes
-detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
-ver = false          # Version of the block data structure
+hash = true         # The unique 32-byte hash identifying the block
+number = true       # The block height (index) in the blockchain
+size = true         # Total size of the block in bytes
+detail_level = true # Enum indicating if data is BASE or EXTENDED (DetailLevel)
+ver = true          # Version of the block data structure
 
 
 # Block Header
