@@ -16,7 +16,7 @@ ver = true          # Version of the block data structure
 
 
 # Block Header
-[block.header]
+[block.blockheader]
 enabled = false # Toggle entire block header object
 
 parent_hash = false        # Hash of the previous block

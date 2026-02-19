@@ -191,8 +191,12 @@ pub async fn store_blocks(
     Ok(())
 }
 
-pub fn stream_blocks_mock()
--> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
+pub fn stream_blocks_mock(
+    config: &AppConfig,
+) -> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
+    let start = config.start_block;
+    let end = config.end_block;
+
     try_stream! {
         let mut file = fs::File::open("blocks.bin").await?;
 
@@ -210,6 +214,17 @@ pub fn stream_blocks_mock()
 
             let decoded_block = Block::decode(&buf[..])
                 .map_err(|e| format!("Mock decoding error: {}", e))?;
+
+            let current_num = decoded_block.number;
+
+            if current_num < start as u64 {
+                continue;
+            }
+
+            if  current_num > end {
+                break;
+            }
+
 
             yield decoded_block;
         }
