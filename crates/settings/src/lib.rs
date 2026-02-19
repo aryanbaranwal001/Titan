@@ -1,6 +1,7 @@
 #![allow(unused)]
 use config::{Case, Config, ConfigError, Environment, File};
-use proto_build::sf::ethereum::r#type::v2::Block;
+use pbjson_types::Timestamp;
+use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::Deserialize;
 
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
@@ -30,6 +31,35 @@ pub struct ExtractedBlock {
     pub size: Option<u64>,
     pub detail_level: Option<DetailLevel>,
     pub ver: Option<i32>,
+    pub blockheader: Option<ExtractedBlockHeader>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedBlockHeader {
+    pub parent_hash: Option<Vec<u8>>,
+    pub uncle_hash: Option<Vec<u8>>,
+    pub coinbase: Option<Vec<u8>>,
+    pub state_root: Option<Vec<u8>>,
+    pub transactions_root: Option<Vec<u8>>,
+    pub receipt_root: Option<Vec<u8>>,
+    pub logs_bloom: Option<Vec<u8>>,
+    pub difficulty: Option<BigInt>,
+    pub total_difficulty: Option<BigInt>,
+    pub number: Option<u64>,
+    pub gas_limit: Option<u64>,
+    pub gas_used: Option<u64>,
+    pub timestamp: Option<Timestamp>,
+    pub extra_data: Option<Vec<u8>>,
+    pub mix_hash: Option<Vec<u8>>,
+    pub nonce: Option<u64>,
+    pub hash: Option<Vec<u8>>,
+    pub base_fee_per_gas: Option<BigInt>,
+    pub withdrawals_root: Option<Vec<u8>>,
+    pub tx_dependency: Option<Uint64NestedArray>,
+    pub blob_gas_used: Option<u64>,
+    pub excess_blob_gas: Option<u64>,
+    pub parent_beacon_root: Option<Vec<u8>>,
+    pub requests_hash: Option<Vec<u8>>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -56,8 +86,116 @@ impl AppConfig {
                 None
             },
             ver: if cfg.size { Some(block.ver) } else { None },
+            blockheader: if cfg.blockheader.enabled {
+                block.header.map(|h| self.extract_header(h))
+            } else {
+                None
+            },
         };
         Ok(extracted_block)
+    }
+    pub fn extract_header(&self, h: BlockHeader) -> ExtractedBlockHeader {
+        // We use the header config section from your AppConfig
+        let cfg = &self.block.blockheader;
+
+        ExtractedBlockHeader {
+            parent_hash: if cfg.parent_hash {
+                Some(h.parent_hash)
+            } else {
+                None
+            },
+            uncle_hash: if cfg.uncle_hash {
+                Some(h.uncle_hash)
+            } else {
+                None
+            },
+            coinbase: if cfg.coinbase { Some(h.coinbase) } else { None },
+            state_root: if cfg.state_root {
+                Some(h.state_root)
+            } else {
+                None
+            },
+            transactions_root: if cfg.transactions_root {
+                Some(h.transactions_root)
+            } else {
+                None
+            },
+            receipt_root: if cfg.receipt_root {
+                Some(h.receipt_root)
+            } else {
+                None
+            },
+            logs_bloom: if cfg.logs_bloom {
+                Some(h.logs_bloom)
+            } else {
+                None
+            },
+
+            // BigInt fields
+            difficulty: if cfg.difficulty { h.difficulty } else { None },
+            total_difficulty: if cfg.total_difficulty {
+                h.total_difficulty
+            } else {
+                None
+            },
+            base_fee_per_gas: if cfg.base_fee_per_gas {
+                h.base_fee_per_gas
+            } else {
+                None
+            },
+
+            // Primitive fields
+            number: if cfg.number { Some(h.number) } else { None },
+            gas_limit: if cfg.gas_limit {
+                Some(h.gas_limit)
+            } else {
+                None
+            },
+            gas_used: if cfg.gas_used { Some(h.gas_used) } else { None },
+            // tyep error
+            // timestamp: if cfg.timestamp { h.timestamp } else { None },
+            timestamp: if cfg.timestamp { None } else { None },
+            extra_data: if cfg.extra_data {
+                Some(h.extra_data)
+            } else {
+                None
+            },
+            mix_hash: if cfg.mix_hash { Some(h.mix_hash) } else { None },
+            nonce: if cfg.nonce { Some(h.nonce) } else { None },
+            hash: if cfg.hash { Some(h.hash) } else { None },
+
+            // EIP specific / Optional fields
+            withdrawals_root: if cfg.withdrawals_root {
+                Some(h.withdrawals_root)
+            } else {
+                None
+            },
+            tx_dependency: if cfg.tx_dependency {
+                h.tx_dependency
+            } else {
+                None
+            },
+            blob_gas_used: if cfg.blob_gas_used {
+                h.blob_gas_used
+            } else {
+                None
+            },
+            excess_blob_gas: if cfg.excess_blob_gas {
+                h.excess_blob_gas
+            } else {
+                None
+            },
+            parent_beacon_root: if cfg.parent_beacon_root {
+                Some(h.parent_beacon_root)
+            } else {
+                None
+            },
+            requests_hash: if cfg.requests_hash {
+                Some(h.requests_hash)
+            } else {
+                None
+            },
+        }
     }
 }
 
@@ -68,7 +206,8 @@ pub struct BlockCfg {
     pub size: bool,
     pub detail_level: bool,
     pub ver: bool,
-    // pub header: BlockHeader,
+
+    pub blockheader: BlockHeaderCfg,
     // pub system_calls: Calls,
     // pub uncles: BlockHeader,
     // pub transaction_traces: TransactionTraces,
@@ -78,8 +217,9 @@ pub struct BlockCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-pub struct BlockHeader {
+pub struct BlockHeaderCfg {
     pub enabled: bool,
+
     pub parent_hash: bool,
     pub uncle_hash: bool,
     pub coinbase: bool,

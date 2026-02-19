@@ -17,7 +17,8 @@ ver = true          # Version of the block data structure
 
 # Block Header
 [block.header]
-enabled = false            # Toggle entire block header object
+enabled = false # Toggle entire block header object
+
 parent_hash = false        # Hash of the previous block
 uncle_hash = false         # Hash of the uncles (ommer) list
 coinbase = false           # Address of the miner/validator
