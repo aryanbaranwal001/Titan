@@ -190,7 +190,34 @@ pub async fn store_blocks(
 
     Ok(())
 }
+
+pub fn stream_blocks_mock()
+-> impl Stream<Item = Result<Block, Box<dyn std::error::Error + Send + Sync>>> {
+    try_stream! {
+        let mut file = fs::File::open("blocks.bin").await?;
+
+        loop {
+            let len = match file.read_u32().await {
+                Ok(l) => l,
+                Err(ref e) if e.kind() == ErrorKind::UnexpectedEof => break,
+                Err(e) => {
+                    Err(Box::<dyn std::error::Error + Send + Sync>::from(e))?
+                }
+            };
+
+            let mut buf = vec![0u8; len as usize];
+            file.read_exact(&mut buf).await?;
+
+            let decoded_block = Block::decode(&buf[..])
+                .map_err(|e| format!("Mock decoding error: {}", e))?;
+
+            yield decoded_block;
+        }
+    }
+}
+
 // my notes
 // 1. what happens when we move a field out of a struct, what happens with that struct?
+// 2. try implementing your own Result and use Box<dyn std::error::Error> works there
 //
 // my todos
