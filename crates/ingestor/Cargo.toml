@@ -13,5 +13,6 @@ proto-build = { path = "../../proto-build" }
 settings = { path = "../settings/" }
 async-stream.workspace = true
 futures-util.workspace = true
+tokio.workspace = true
 
 [build-dependencies]

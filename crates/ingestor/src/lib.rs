@@ -1,5 +1,10 @@
 #![allow(unused)]
 use prost::Message;
+use std::io::ErrorKind;
+
+use tokio::fs::{self, OpenOptions};
+use tokio::io::AsyncReadExt;
+use tokio::io::AsyncWriteExt;
 
 use proto_build::sf::ethereum::r#type::v2::Block;
 use proto_build::sf::firehose::v2::Request as FirehoseRequest;
@@ -146,6 +151,45 @@ pub async fn stream_blocks(
     }
 }
 
+// ingest blocks from firehose api key and store it in blocks.bin file
+// to use that data as mock
+pub async fn store_blocks(
+    mut client: IngestorClient,
+    config: &AppConfig,
+) -> Result<(), Box<dyn std::error::Error>> {
+    let request = FirehoseRequest {
+        start_block_num: config.start_block,
+        stop_block_num: config.end_block,
+        final_blocks_only: config.final_blocks_only,
+        cursor: "".to_string(),
+        transforms: vec![],
+    };
+
+    let mut stream = client.blocks(request).await?.into_inner();
+
+    let mut file = OpenOptions::new()
+        .create(true)
+        .append(true)
+        .open("blocks.bin")
+        .await?;
+
+    while let Some(response) = stream.message().await? {
+        if let Some(block) = response.block {
+            let len = block.value.len() as u32;
+            file.write_u32(len).await?;
+            file.write_all(&block.value).await?;
+
+            let decoded_block =
+                Block::decode(&block.value[..]).map_err(|e| -> Box<dyn std::error::Error> {
+                    format!("Decoding error: {}", e).into()
+                })?;
+
+            println!("saved to disk, block number: {}", decoded_block.number);
+        }
+    }
+
+    Ok(())
+}
 // my notes
 // 1. what happens when we move a field out of a struct, what happens with that struct?
 //
