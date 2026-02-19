@@ -60,7 +60,7 @@ pub struct TransactionTraces {
     pub r: bool,
     pub s: bool,
     pub gas_used: bool,
-    pub r#type: bool, // 'type' is a reserved keyword in Rust
+    pub r#type: bool,
     pub max_fee_per_gas: bool,
     pub max_priority_fee_per_gas: bool,
     pub index: bool,
