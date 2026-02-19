@@ -46,7 +46,8 @@ requests_hash = false      # Hash of execution layer requests
 
 # Block System Calls
 [block.system_calls]
-enabled = false              # Toggle internal calls
+enabled = false # Toggle internal calls
+
 index = false                # Call index
 parent_index = false         # Parent call index
 depth = false                # Call stack depth
@@ -68,6 +69,7 @@ failure_reason = false       # Error message
 state_reverted = false       # If state changes rolled back
 begin_ordinal = false        # Start order
 end_ordinal = false          # End order
+
 
 [block.system_calls.storage_changes]
 enabled = false   # Toggle storage slot modifications
@@ -98,6 +100,8 @@ old_value = false # Gas before
 new_value = false # Gas after
 reason = false    # Reason enum
 ordinal = false   # Order
+
+[block.system_calls.account_creations]
 
 
 [block.uncles]

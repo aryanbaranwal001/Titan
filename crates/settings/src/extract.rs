@@ -2,7 +2,7 @@ use crate::AppConfig;
 use prost_types::Timestamp;
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::Deserialize;
-use std::fmt;
+use std::{collections::HashMap, fmt};
 
 #[derive(Deserialize, Debug)]
 pub struct ExtractedBlock {
@@ -12,6 +12,7 @@ pub struct ExtractedBlock {
     pub detail_level: Option<DetailLevel>,
     pub ver: Option<i32>,
     pub blockheader: Option<ExtractedBlockHeader>,
+    pub system_calls: Option<Vec<ExtractedSystemCalls>>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -42,6 +43,31 @@ pub struct ExtractedBlockHeader {
     pub excess_blob_gas: Option<u64>,
     pub parent_beacon_root: Option<Vec<u8>>,
     pub requests_hash: Option<Vec<u8>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedSystemCalls {
+    pub index: Option<u32>,
+    pub parent_index: Option<u32>,
+    pub depth: Option<u32>,
+    pub call_type: Option<i32>,
+    pub caller: Option<Vec<u8>>,
+    pub address: Option<Vec<u8>>,
+    pub address_delegates_to: Option<Vec<u8>>,
+    pub value: Option<BigInt>,
+    pub gas_limit: Option<u64>,
+    pub gas_consumed: Option<u64>,
+    pub return_data: Option<Vec<u8>>,
+    pub input: Option<Vec<u8>>,
+    pub executed_code: Option<bool>,
+    pub suicide: Option<bool>,
+    pub keccak_preimages: Option<HashMap<String, String>>,
+    pub status_failed: Option<bool>,
+    pub status_reverted: Option<bool>,
+    pub failure_reason: Option<String>,
+    pub state_reverted: Option<bool>,
+    pub begin_ordinal: Option<u64>,
+    pub end_ordinal: Option<u64>,
 }
 
 impl fmt::Display for ExtractedBlock {

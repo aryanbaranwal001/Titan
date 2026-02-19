@@ -9,7 +9,7 @@ pub struct BlockCfg {
     pub ver: bool,
 
     pub blockheader: BlockHeaderCfg,
-    // pub system_calls: Calls,
+    pub system_calls: SystemCallCfg,
     // pub uncles: BlockHeader,
     // pub transaction_traces: TransactionTraces,
     // pub balance_changes: BalanceChanges,
@@ -45,6 +45,68 @@ pub struct BlockHeaderCfg {
     pub excess_blob_gas: bool,
     pub parent_beacon_root: bool,
     pub requests_hash: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct SystemCallCfg {
+    pub enabled: bool,
+
+    pub index: bool,
+    pub parent_index: bool,
+    pub depth: bool,
+    pub call_type: bool,
+    pub caller: bool,
+    pub address: bool,
+    pub address_delegates_to: bool,
+    pub value: bool,
+    pub gas_limit: bool,
+    pub gas_consumed: bool,
+    pub return_data: bool,
+    pub input: bool,
+    pub executed_code: bool,
+    pub suicide: bool,
+    pub keccak_preimages: bool,
+    pub status_failed: bool,
+    pub status_reverted: bool,
+    pub failure_reason: bool,
+    pub state_reverted: bool,
+    pub begin_ordinal: bool,
+    pub end_ordinal: bool,
+    // pub storage_changes: EnabledOnly,
+    // pub balance_changes: BalanceChanges,
+    // pub nonce_changes: EnabledOnly,
+    // pub gas_changes: EnabledOnly,
+    // pub account_creations: EnabledOnly,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct Calls {
+    pub enabled: bool,
+    pub index: bool,
+    pub parent_index: bool,
+    pub depth: bool,
+    pub call_type: bool,
+    pub caller: bool,
+    pub address: bool,
+    pub address_delegates_to: bool,
+    pub value: bool,
+    pub gas_limit: bool,
+    pub gas_consumed: bool,
+    pub return_data: bool,
+    pub input: bool,
+    pub executed_code: bool,
+    pub suicide: bool,
+    pub keccak_preimages: bool,
+    pub status_failed: bool,
+    pub status_reverted: bool,
+    pub failure_reason: bool,
+    pub state_reverted: bool,
+    pub begin_ordinal: bool,
+    pub end_ordinal: bool,
+    pub storage_changes: EnabledOnly,
+    pub balance_changes: BalanceChanges,
+    pub nonce_changes: EnabledOnly,
+    pub gas_changes: EnabledOnly,
 }
 
 #[derive(Deserialize, Debug, Default)]
@@ -87,35 +149,6 @@ pub struct Receipt {
     pub blob_gas_used: bool,
     pub blob_gas_price: bool,
     pub logs: EnabledOnly,
-}
-#[derive(Deserialize, Debug, Default)]
-pub struct Calls {
-    pub enabled: bool,
-    pub index: bool,
-    pub parent_index: bool,
-    pub depth: bool,
-    pub call_type: bool,
-    pub caller: bool,
-    pub address: bool,
-    pub address_delegates_to: bool,
-    pub value: bool,
-    pub gas_limit: bool,
-    pub gas_consumed: bool,
-    pub return_data: bool,
-    pub input: bool,
-    pub executed_code: bool,
-    pub suicide: bool,
-    pub keccak_preimages: bool,
-    pub status_failed: bool,
-    pub status_reverted: bool,
-    pub failure_reason: bool,
-    pub state_reverted: bool,
-    pub begin_ordinal: bool,
-    pub end_ordinal: bool,
-    pub storage_changes: EnabledOnly,
-    pub balance_changes: BalanceChanges,
-    pub nonce_changes: EnabledOnly,
-    pub gas_changes: EnabledOnly,
 }
 #[derive(Deserialize, Debug, Default)]
 pub struct CodeChanges {
