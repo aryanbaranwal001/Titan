@@ -7,5 +7,5 @@ edition = "2024"
 config.workspace = true
 serde.workspace = true
 dotenv.workspace = true
-pbjson-types.workspace = true
+prost-types.workspace = true
 proto-build = { path = "../../proto-build/" }

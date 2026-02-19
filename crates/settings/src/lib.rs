@@ -1,8 +1,8 @@
 #![allow(unused)]
 use config::{Case, Config, ConfigError, Environment, File};
-use pbjson_types::Timestamp;
+use prost_types::Timestamp;
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
 // the toggle structure used to select which fields to include
@@ -33,6 +33,43 @@ pub struct ExtractedBlock {
     pub ver: Option<i32>,
     pub blockheader: Option<ExtractedBlockHeader>,
 }
+#[derive(Deserialize)]
+#[serde(remote = "prost_types::Timestamp")]
+pub struct TimestampDef {
+    pub seconds: i64,
+    pub nanos: i32,
+}
+
+// task: replace this boilderplate code with serde_with trait implementation
+pub mod option_timestamp {
+    use super::TimestampDef;
+    // use serde::{Deserialize, Deserializer, Serialize, Serializer};
+    use serde::{Deserialize, Deserializer};
+
+    // pub fn serialize<S>(
+    //     value: &Option<prost_types::Timestamp>,
+    //     serializer: S,
+    // ) -> Result<S::Ok, S::Error>
+    // where
+    //     S: Serializer,
+    // {
+    //     #[derive(Serialize)]
+    //     struct Helper<'a>(#[serde(with = "TimestampDef")] &'a prost_types::Timestamp);
+    //
+    //     value.as_ref().map(Helper).serialize(serializer)
+    // }
+
+    pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<prost_types::Timestamp>, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        #[derive(Deserialize)]
+        struct Helper(#[serde(with = "TimestampDef")] prost_types::Timestamp);
+
+        let helper = Option::<Helper>::deserialize(deserializer)?;
+        Ok(helper.map(|h| h.0))
+    }
+}
 
 #[derive(Deserialize, Debug)]
 pub struct ExtractedBlockHeader {
@@ -48,6 +85,8 @@ pub struct ExtractedBlockHeader {
     pub number: Option<u64>,
     pub gas_limit: Option<u64>,
     pub gas_used: Option<u64>,
+
+    #[serde(with = "option_timestamp")]
     pub timestamp: Option<Timestamp>,
     pub extra_data: Option<Vec<u8>>,
     pub mix_hash: Option<Vec<u8>>,
@@ -152,9 +191,7 @@ impl AppConfig {
                 None
             },
             gas_used: if cfg.gas_used { Some(h.gas_used) } else { None },
-            // tyep error
-            // timestamp: if cfg.timestamp { h.timestamp } else { None },
-            timestamp: if cfg.timestamp { None } else { None },
+            timestamp: if cfg.timestamp { h.timestamp } else { None },
             extra_data: if cfg.extra_data {
                 Some(h.extra_data)
             } else {
@@ -360,3 +397,8 @@ impl AppConfig {
             .try_deserialize()
     }
 }
+
+// my notes
+//
+// 1. check if every field implementation is correct i wrote with AI
+// 2. check in detail how this serde remote works
