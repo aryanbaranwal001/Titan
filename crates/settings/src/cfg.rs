@@ -72,11 +72,59 @@ pub struct SystemCallCfg {
     pub state_reverted: bool,
     pub begin_ordinal: bool,
     pub end_ordinal: bool,
-    // pub storage_changes: EnabledOnly,
-    // pub balance_changes: BalanceChanges,
-    // pub nonce_changes: EnabledOnly,
-    // pub gas_changes: EnabledOnly,
-    // pub account_creations: EnabledOnly,
+    pub storage_changes: StorageChangesCfg,
+    pub balance_changes: BalanceChangesCfg,
+    pub nonce_changes: NonceChangesCfg,
+    pub gas_changes: CodeChangesCfg,
+    pub account_creations: AccountCreationsCfg,
+}
+
+#[derive(Deserialize, Debug, Default)]
+struct StorageChangesCfg {
+    pub address: bool,
+    pub key: bool,
+    pub old_value: bool,
+    pub new_value: bool,
+    pub ordinal: bool,
+}
+#[derive(Deserialize, Debug, Default)]
+struct BalanceChangesCfg {
+    pub address: bool,
+    pub old_value: bool,
+    pub new_value: bool,
+    pub reason: bool,
+    pub ordinal: bool,
+}
+#[derive(Deserialize, Debug, Default)]
+struct NonceChangesCfg {
+    pub address: bool,
+    pub old_value: bool,
+    pub new_value: bool,
+    pub ordinal: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+struct CodeChangesCfg {
+    pub address: bool,
+    pub old_hash: bool,
+    pub old_code: bool,
+    pub new_hash: bool,
+    pub new_code: bool,
+    pub ordinal: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+struct GasCahngesCfg {
+    pub old_value: bool,
+    pub new_value: bool,
+    pub reason: bool,
+    pub ordinal: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+struct AccountCreationsCfg {
+    pub account: bool,
+    pub ordinal: bool,
 }
 
 // #[derive(Deserialize, Debug, Default)]

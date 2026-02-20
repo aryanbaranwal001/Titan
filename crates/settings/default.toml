@@ -81,7 +81,8 @@ new_value = false # Value after
 ordinal = false   # Order
 
 [block.system_calls.balance_changes]
-enabled = false   # Toggle Ether balance movements (BalanceChange)
+enabled = false # Toggle Ether balance movements (BalanceChange)
+
 address = false   # Address changed
 old_value = false # BigInt before
 new_value = false # BigInt after
@@ -89,20 +90,35 @@ reason = false    # Reason enum
 ordinal = false   # Order
 
 [block.system_calls.nonce_changes]
-enabled = false   # Toggle account nonce updates (NonceChange)
+enabled = false # Toggle account nonce updates (NonceChange)
+
 address = false   # Address changed
 old_value = false # Nonce before
 new_value = false # Nonce after
 ordinal = false   # Order
 
+
+[block.system_calls.code_changes]
+address = false
+old_hash = false
+old_code = false
+new_hash = false
+new_code = false
+ordinal = false
+
 [block.system_calls.gas_changes]
-enabled = false   # Toggle gas consumption details (GasChange)
+enabled = false # Toggle gas consumption details (GasChange)
+
 old_value = false # Gas before
 new_value = false # Gas after
 reason = false    # Reason enum
 ordinal = false   # Order
 
 [block.system_calls.account_creations]
+enabled = false
+
+account = false
+ordinal = false
 
 
 [block.uncles]
