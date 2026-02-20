@@ -373,12 +373,7 @@ impl AppConfig {
             },
             suicide: if cfg.suicide { Some(c.suicide) } else { None },
             keccak_preimages: if cfg.keccak_preimages {
-                let preimages = c.keccak_preimages;
-                if preimages.is_empty() {
-                    None
-                } else {
-                    Some(preimages)
-                }
+                Some(c.keccak_preimages)
             } else {
                 None
             },
