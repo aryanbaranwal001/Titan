@@ -1,6 +1,7 @@
 use crate::AppConfig;
+use crate::cfg::SystemCallCfg;
 use prost_types::Timestamp;
-use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
+use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Call, Uint64NestedArray};
 use serde::Deserialize;
 use std::{collections::HashMap, fmt};
 
@@ -12,9 +13,10 @@ pub struct ExtractedBlock {
     pub detail_level: Option<DetailLevel>,
     pub ver: Option<i32>,
     pub blockheader: Option<ExtractedBlockHeader>,
-    pub system_calls: Option<Vec<ExtractedSystemCalls>>,
+    pub system_calls: Option<Vec<ExtractedSystemCall>>,
 }
 
+//why the fuck are we even using Deserialize
 #[derive(Deserialize, Debug)]
 pub struct ExtractedBlockHeader {
     pub parent_hash: Option<Vec<u8>>,
@@ -46,7 +48,7 @@ pub struct ExtractedBlockHeader {
 }
 
 #[derive(Deserialize, Debug)]
-pub struct ExtractedSystemCalls {
+pub struct ExtractedSystemCall {
     pub index: Option<u32>,
     pub parent_index: Option<u32>,
     pub depth: Option<u32>,
@@ -231,6 +233,94 @@ impl AppConfig {
             },
             requests_hash: if cfg.requests_hash {
                 Some(h.requests_hash)
+            } else {
+                None
+            },
+        }
+    }
+    pub fn extract_system_call(&self, c: Call, cfg: &SystemCallCfg) -> ExtractedSystemCall {
+        let cfg = &self.block.system_calls;
+
+        ExtractedSystemCall {
+            index: if cfg.index { Some(c.index) } else { None },
+            parent_index: if cfg.parent_index {
+                Some(c.parent_index)
+            } else {
+                None
+            },
+            depth: if cfg.depth { Some(c.depth) } else { None },
+            call_type: if cfg.call_type {
+                Some(c.call_type)
+            } else {
+                None
+            },
+            caller: if cfg.caller { Some(c.caller) } else { None },
+            address: if cfg.address { Some(c.address) } else { None },
+            address_delegates_to: if cfg.address_delegates_to {
+                c.address_delegates_to
+            } else {
+                None
+            },
+            value: if cfg.value { c.value } else { None },
+            gas_limit: if cfg.gas_limit {
+                Some(c.gas_limit)
+            } else {
+                None
+            },
+            gas_consumed: if cfg.gas_consumed {
+                Some(c.gas_consumed)
+            } else {
+                None
+            },
+            return_data: if cfg.return_data {
+                Some(c.return_data)
+            } else {
+                None
+            },
+            input: if cfg.input { Some(c.input) } else { None },
+            executed_code: if cfg.executed_code {
+                Some(c.executed_code)
+            } else {
+                None
+            },
+            suicide: if cfg.suicide { Some(c.suicide) } else { None },
+            keccak_preimages: if cfg.keccak_preimages {
+                let preimages = c.keccak_preimages;
+                if preimages.is_empty() {
+                    None
+                } else {
+                    Some(preimages)
+                }
+            } else {
+                None
+            },
+            status_failed: if cfg.status_failed {
+                Some(c.status_failed)
+            } else {
+                None
+            },
+            status_reverted: if cfg.status_reverted {
+                Some(c.status_reverted)
+            } else {
+                None
+            },
+            failure_reason: if cfg.failure_reason {
+                Some(c.failure_reason)
+            } else {
+                None
+            },
+            state_reverted: if cfg.state_reverted {
+                Some(c.state_reverted)
+            } else {
+                None
+            },
+            begin_ordinal: if cfg.begin_ordinal {
+                Some(c.begin_ordinal)
+            } else {
+                None
+            },
+            end_ordinal: if cfg.end_ordinal {
+                Some(c.end_ordinal)
             } else {
                 None
             },

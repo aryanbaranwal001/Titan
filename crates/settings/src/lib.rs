@@ -1,7 +1,7 @@
 #![allow(unused)]
 use cfg::{BlockCfg, BlockHeaderCfg};
 use config::{Case, Config, ConfigError, Environment, File};
-use extract::{DetailLevel, ExtractedBlock, ExtractedBlockHeader};
+use extract::{DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall};
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::{Deserialize, Serialize};
 pub mod cfg;
@@ -47,6 +47,21 @@ impl AppConfig {
             ver: if cfg.size { Some(block.ver) } else { None },
             blockheader: if cfg.blockheader.enabled {
                 block.header.map(|h| self.extract_header(h))
+            } else {
+                None
+            },
+            system_calls: if cfg.system_calls.enabled {
+                let extracted: Vec<ExtractedSystemCall> = block
+                    .system_calls
+                    .into_iter()
+                    .map(|c| self.extract_system_call(c, &cfg.system_calls))
+                    .collect();
+
+                if extracted.is_empty() {
+                    None
+                } else {
+                    Some(extracted)
+                }
             } else {
                 None
             },
