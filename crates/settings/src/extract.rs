@@ -140,6 +140,86 @@ impl fmt::Display for ExtractedBlockHeader {
     }
 }
 
+impl fmt::Display for ExtractedSystemCall {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "  SystemCall {{")?;
+
+        if let Some(v) = self.index {
+            writeln!(f, "    index: {},", v)?;
+        }
+        if let Some(v) = self.parent_index {
+            writeln!(f, "    parent_index: {},", v)?;
+        }
+        if let Some(v) = self.depth {
+            writeln!(f, "    depth: {},", v)?;
+        }
+        if let Some(v) = self.call_type {
+            writeln!(f, "    call_type: {},", v)?;
+        }
+
+        // Byte arrays formatted as Hex
+        if let Some(ref v) = self.caller {
+            writeln!(f, "    caller: {:?},", v)?;
+        }
+        if let Some(ref v) = self.address {
+            writeln!(f, "    address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.address_delegates_to {
+            writeln!(f, "    delegates_to: {:?},", v)?;
+        }
+
+        if let Some(ref v) = self.value {
+            writeln!(f, "    value: {:?},", v)?;
+        } // BigInt uses Debug format
+        if let Some(v) = self.gas_limit {
+            writeln!(f, "    gas_limit: {},", v)?;
+        }
+        if let Some(v) = self.gas_consumed {
+            writeln!(f, "    gas_consumed: {},", v)?;
+        }
+
+        if let Some(ref v) = self.return_data {
+            writeln!(f, "    return_data: {:?},", v)?;
+        }
+        if let Some(ref v) = self.input {
+            writeln!(f, "    input: {:?},", v)?;
+        }
+
+        if let Some(v) = self.executed_code {
+            writeln!(f, "    executed_code: {},", v)?;
+        }
+        if let Some(v) = self.suicide {
+            writeln!(f, "    suicide: {},", v)?;
+        }
+
+        if let Some(ref v) = self.keccak_preimages {
+            writeln!(f, "    keccak_preimages: {} entries,", v.len())?;
+        }
+
+        if let Some(v) = self.status_failed {
+            writeln!(f, "    status_failed: {},", v)?;
+        }
+        if let Some(v) = self.status_reverted {
+            writeln!(f, "    status_reverted: {},", v)?;
+        }
+
+        if let Some(ref v) = self.failure_reason {
+            writeln!(f, "    failure_reason: \"{}\",", v)?;
+        }
+
+        if let Some(v) = self.state_reverted {
+            writeln!(f, "    state_reverted: {},", v)?;
+        }
+        if let Some(v) = self.begin_ordinal {
+            writeln!(f, "    begin_ordinal: {},", v)?;
+        }
+        if let Some(v) = self.end_ordinal {
+            writeln!(f, "    end_ordinal: {},", v)?;
+        }
+
+        write!(f, "  }}")
+    }
+}
 impl AppConfig {
     pub fn extract_header(&self, h: BlockHeader) -> ExtractedBlockHeader {
         let cfg = &self.block.blockheader;
