@@ -95,6 +95,14 @@ impl fmt::Display for ExtractedBlock {
             let header_str = format!("{}", header).replace('\n', "\n  ");
             writeln!(f, "  blockheader: {}", header_str)?;
         }
+        if let Some(ref calls) = self.system_calls {
+            writeln!(f, "  system_calls: [")?;
+            for call in calls {
+                let system_call_str = format!("  {}", call).replace('\n', "\n  ");
+                writeln!(f, "{},", system_call_str)?;
+            }
+            writeln!(f, "  ],")?;
+        }
         write!(f, "}}")
     }
 }

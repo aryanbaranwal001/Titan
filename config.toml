@@ -1,0 +1,63 @@
+
+[block]
+hash = true          # The unique 32-byte hash identifying the block
+number = false       # The block height (index) in the blockchain
+size = false         # Total size of the block in bytes
+detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
+ver = false          # Version of the block data structure
+
+
+# Block Header
+[block.blockheader]
+enabled = false # Toggle entire block header object
+
+parent_hash = false        # Hash of the previous block
+uncle_hash = false         # Hash of the uncles (ommer) list
+coinbase = false           # Address of the miner/validator
+state_root = false         # Root of the state trie
+transactions_root = false  # Root of the transaction trie
+receipt_root = false       # Root of the transaction receipt trie
+logs_bloom = false         # Bloom filter for log searching
+difficulty = false         # Mining difficulty (BigInt)
+total_difficulty = false   # Cumulative difficulty (BigInt, deprecated)
+number = false             # Duplicate of block height for header context
+gas_limit = false          # Maximum gas allowed in this block
+gas_used = false           # Total gas actually consumed
+timestamp = false          # Unix timestamp (google.protobuf.Timestamp)
+extra_data = false         # Arbitrary data field
+mix_hash = false           # PoW hash or RANDAO
+nonce = false              # Proof-of-work seal
+hash = false               # Block hash (calculated from header)
+base_fee_per_gas = false   # Minimum fee per gas (BigInt, EIP-1559)
+withdrawals_root = false   # Root of the beacon chain withdrawals trie
+tx_dependency = false      # Parallel execution dependency (Uint64NestedArray)
+blob_gas_used = false      # Gas consumed by EIP-4844 blobs
+excess_blob_gas = false    # Running total of unused blob gas capacity
+parent_beacon_root = false # Root of the parent beacon block
+requests_hash = false      # Hash of execution layer requests
+
+# Block System Calls
+[block.system_calls]
+enabled = true # Toggle internal calls
+
+index = true                 # Call index
+parent_index = true          # Parent call index
+depth = false                # Call stack depth
+call_type = false            # Type (CALL, DELEGATE, CREATE, etc.)
+caller = false               # Address initiating the call
+address = false              # Target address
+address_delegates_to = false # Effective address for DELEGATECALL
+value = false                # Ether sent (BigInt)
+gas_limit = false            # Gas allocated
+gas_consumed = false         # Gas used
+return_data = false          # Data returned
+input = false                # Call data
+executed_code = false        # If code was run
+suicide = false              # If SELFDESTRUCT occurred
+keccak_preimages = false     # Map of hash -> preimage
+status_failed = false        # If execution failed
+status_reverted = false      # If execution reverted
+failure_reason = false       # Error message
+state_reverted = false       # If state changes rolled back
+begin_ordinal = false        # Start order
+end_ordinal = false          # End order
