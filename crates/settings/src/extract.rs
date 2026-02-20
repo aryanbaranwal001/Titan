@@ -84,6 +84,15 @@ struct ExtractedStorageChange {
     pub ordinal: Option<u64>,
 }
 
+#[derive(Deserialize, Debug)]
+struct ExtractedBalanceChange {
+    pub address: Option<Vec<u8>>,
+    pub old_value: Option<BigInt>,
+    pub new_value: Option<BigInt>,
+    pub reason: Option<i32>,
+    pub ordinal: Option<u64>,
+}
+
 impl AppConfig {
     pub fn extract_header(&self, h: BlockHeader) -> ExtractedBlockHeader {
         let cfg = &self.block.blockheader;
@@ -263,6 +272,11 @@ impl AppConfig {
             } else {
                 None
             },
+            storage_changes: None,
+            balance_changes: None,
+            nonce_changes: None,
+            gas_changes: None,
+            account_creations: None,
         }
     }
 }

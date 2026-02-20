@@ -57,11 +57,7 @@ impl AppConfig {
                     .map(|c| self.extract_system_call(c, &cfg.system_calls))
                     .collect();
 
-                if extracted.is_empty() {
-                    None
-                } else {
-                    Some(extracted)
-                }
+                Some(extracted)
             } else {
                 None
             },
