@@ -1,7 +1,9 @@
 use crate::AppConfig;
 use crate::cfg::SystemCallCfg;
 use prost_types::Timestamp;
-use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Call, Uint64NestedArray};
+use proto_build::sf::ethereum::r#type::v2::{
+    BigInt, Block, BlockHeader, Call, StorageChange, Uint64NestedArray,
+};
 use serde::Deserialize;
 use std::{collections::HashMap, fmt};
 
@@ -70,6 +72,16 @@ pub struct ExtractedSystemCall {
     pub state_reverted: Option<bool>,
     pub begin_ordinal: Option<u64>,
     pub end_ordinal: Option<u64>,
+    pub storage_changes: Option<Vec<ExtractedStorageChange>>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ExtractedStorageChange {
+    pub address: Option<Vec<u8>>,
+    pub key: Option<Vec<u8>>,
+    pub old_value: Option<Vec<u8>>,
+    pub new_value: Option<Vec<u8>>,
+    pub ordinal: Option<u64>,
 }
 
 impl fmt::Display for ExtractedBlock {

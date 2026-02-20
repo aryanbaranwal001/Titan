@@ -72,7 +72,8 @@ end_ordinal = false          # End order
 
 
 [block.system_calls.storage_changes]
-enabled = false   # Toggle storage slot modifications
+enabled = false # Toggle storage slot modifications
+
 address = false   # Address modified
 key = false       # Storage key
 old_value = false # Value before
