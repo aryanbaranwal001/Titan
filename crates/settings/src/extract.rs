@@ -611,9 +611,177 @@ impl fmt::Display for ExtractedSystemCall {
             writeln!(f, "    end_ordinal: {},", v)?;
         }
 
+        if let Some(ref v) = self.storage_changes {
+            writeln!(f, "    storage_changes: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+        if let Some(ref v) = self.balance_changes {
+            writeln!(f, "    balance_changes: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+        if let Some(ref v) = self.nonce_changes {
+            writeln!(f, "    nonce_changes: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+        if let Some(ref v) = self.code_changes {
+            writeln!(f, "    code_changes: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+        if let Some(ref v) = self.gas_changes {
+            writeln!(f, "    gas_changes: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+        if let Some(ref v) = self.account_creations {
+            writeln!(f, "    account_creations: [")?;
+            for item in v {
+                let str = format!("      {}", item).replace('\n', "\n      ");
+                writeln!(f, "{},", str)?;
+            }
+            writeln!(f, "    ],")?;
+        }
+
         write!(f, "  }}")
     }
 }
+
+impl fmt::Display for ExtractedStorageChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "StorageChange {{")?;
+        if let Some(ref v) = self.address {
+            writeln!(f, "  address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.key {
+            writeln!(f, "  key: {:?},", v)?;
+        }
+        if let Some(ref v) = self.old_value {
+            writeln!(f, "  old_value: {:?},", v)?;
+        }
+        if let Some(ref v) = self.new_value {
+            writeln!(f, "  new_value: {:?},", v)?;
+        }
+        if let Some(v) = self.ordinal {
+            writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedBalanceChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "BalanceChange {{")?;
+        if let Some(ref v) = self.address {
+            writeln!(f, "  address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.old_value {
+            writeln!(f, "  old_value: {:?},", v)?;
+        }
+        if let Some(ref v) = self.new_value {
+            writeln!(f, "  new_value: {:?},", v)?;
+        }
+        if let Some(v) = self.reason {
+            writeln!(f, "  reason: {},", v)?;
+        }
+        if let Some(v) = self.ordinal {
+            writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedNonceChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "NonceChange {{")?;
+        if let Some(ref v) = self.address {
+            writeln!(f, "  address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.old_value {
+            writeln!(f, "  old_value: {:?},", v)?;
+        }
+        if let Some(ref v) = self.new_value {
+            writeln!(f, "  new_value: {:?},", v)?;
+        }
+        if let Some(v) = self.ordinal {
+            writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedCodeChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "CodeChange {{")?;
+        if let Some(ref v) = self.address {
+            writeln!(f, "  address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.old_hash {
+            writeln!(f, "  old_hash: {:?},", v)?;
+        }
+        if let Some(ref v) = self.old_code {
+            writeln!(f, "  old_code: {:?},", v)?;
+        }
+        if let Some(ref v) = self.new_hash {
+            writeln!(f, "  new_hash: {:?},", v)?;
+        }
+        if let Some(ref v) = self.new_code {
+            writeln!(f, "  new_code: {:?},", v)?;
+        }
+        writeln!(f, "  ordinal: {},", self.ordinal)?;
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedGasChange {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "GasChange {{")?;
+        if let Some(v) = self.old_value {
+            writeln!(f, "  old_value: {},", v)?;
+        }
+        if let Some(v) = self.new_value {
+            writeln!(f, "  new_value: {},", v)?;
+        }
+        if let Some(v) = self.reason {
+            writeln!(f, "  reason: {},", v)?;
+        }
+        if let Some(v) = self.ordinal {
+            writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedAccountCreations {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "AccountCreation {{")?;
+        if let Some(ref v) = self.account {
+            writeln!(f, "  account: {:?},", v)?;
+        }
+        if let Some(v) = self.ordinal {
+            writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
 
 #[derive(Deserialize)]
 #[serde(remote = "prost_types::Timestamp")]
