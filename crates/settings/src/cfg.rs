@@ -80,7 +80,7 @@ pub struct SystemCallCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-struct StorageChangesCfg {
+pub struct StorageChangesCfg {
     pub address: bool,
     pub key: bool,
     pub old_value: bool,
@@ -88,7 +88,7 @@ struct StorageChangesCfg {
     pub ordinal: bool,
 }
 #[derive(Deserialize, Debug, Default)]
-struct BalanceChangesCfg {
+pub struct BalanceChangesCfg {
     pub address: bool,
     pub old_value: bool,
     pub new_value: bool,
@@ -96,7 +96,7 @@ struct BalanceChangesCfg {
     pub ordinal: bool,
 }
 #[derive(Deserialize, Debug, Default)]
-struct NonceChangesCfg {
+pub struct NonceChangesCfg {
     pub address: bool,
     pub old_value: bool,
     pub new_value: bool,
@@ -104,7 +104,7 @@ struct NonceChangesCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-struct CodeChangesCfg {
+pub struct CodeChangesCfg {
     pub address: bool,
     pub old_hash: bool,
     pub old_code: bool,
@@ -114,7 +114,7 @@ struct CodeChangesCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-struct GasCahngesCfg {
+pub struct GasCahngesCfg {
     pub old_value: bool,
     pub new_value: bool,
     pub reason: bool,
@@ -122,7 +122,7 @@ struct GasCahngesCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-struct AccountCreationsCfg {
+pub struct AccountCreationsCfg {
     pub account: bool,
     pub ordinal: bool,
 }
