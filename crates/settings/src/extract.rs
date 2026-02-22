@@ -73,6 +73,35 @@ pub struct ExtractedSystemCall {
     pub begin_ordinal: Option<u64>,
     pub end_ordinal: Option<u64>,
     pub storage_changes: Option<Vec<ExtractedStorageChange>>,
+    balance_changes: Option<Vec<ExtractedBalanceChange>>,
+    nonce_changes: Option<Vec<ExtractedNonceChange>>,
+    code_changes: Option<Vec<ExtractedCodeChange>>,
+    gas_changes: Option<Vec<ExtractedGasChange>>,
+    account_creations: Option<Vec<ExtractedAccountCreations>>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ExtractedCodeChange {
+    pub address: Option<Vec<u8>>,
+    pub old_hash: Option<Vec<u8>>,
+    pub old_code: Option<Vec<u8>>,
+    pub new_hash: Option<Vec<u8>>,
+    pub new_code: Option<Vec<u8>>,
+    pub ordinal: u64,
+}
+
+#[derive(Deserialize, Debug)]
+struct ExtractedGasChange {
+    pub old_value: Option<u64>,
+    pub new_value: Option<u64>,
+    pub reason: Option<i32>,
+    pub ordinal: Option<u64>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ExtractedAccountCreations {
+    pub account: Option<Vec<u8>>,
+    pub ordinal: Option<u64>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -86,6 +115,15 @@ struct ExtractedStorageChange {
 
 #[derive(Deserialize, Debug)]
 struct ExtractedBalanceChange {
+    pub address: Option<Vec<u8>>,
+    pub old_value: Option<BigInt>,
+    pub new_value: Option<BigInt>,
+    pub reason: Option<i32>,
+    pub ordinal: Option<u64>,
+}
+
+#[derive(Deserialize, Debug)]
+struct ExtractedNonceChange {
     pub address: Option<Vec<u8>>,
     pub old_value: Option<BigInt>,
     pub new_value: Option<BigInt>,
@@ -274,6 +312,7 @@ impl AppConfig {
             },
             storage_changes: None,
             balance_changes: None,
+            code_changes: None,
             nonce_changes: None,
             gas_changes: None,
             account_creations: None,
