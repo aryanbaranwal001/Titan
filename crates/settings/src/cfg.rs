@@ -75,7 +75,8 @@ pub struct SystemCallCfg {
     pub storage_changes: StorageChangesCfg,
     pub balance_changes: BalanceChangesCfg,
     pub nonce_changes: NonceChangesCfg,
-    pub gas_changes: CodeChangesCfg,
+    pub code_changes: CodeChangesCfg,
+    pub gas_changes: GasChangesCfg,
     pub account_creations: AccountCreationsCfg,
 }
 
@@ -114,7 +115,7 @@ pub struct CodeChangesCfg {
 }
 
 #[derive(Deserialize, Debug, Default)]
-pub struct GasCahngesCfg {
+pub struct GasChangesCfg {
     pub old_value: bool,
     pub new_value: bool,
     pub reason: bool,

@@ -1,8 +1,11 @@
+#![allow(deprecated)]
+
 use crate::AppConfig;
 use crate::cfg::SystemCallCfg;
 use prost_types::Timestamp;
 use proto_build::sf::ethereum::r#type::v2::{
-    BigInt, Block, BlockHeader, Call, StorageChange, Uint64NestedArray,
+    AccountCreation, BalanceChange, BigInt, Block, BlockHeader, Call, CodeChange, GasChange,
+    NonceChange, StorageChange, Uint64NestedArray,
 };
 use serde::Deserialize;
 use std::{collections::HashMap, fmt};
@@ -127,7 +130,6 @@ pub struct ExtractedNonceChange {
     pub address: Option<Vec<u8>>,
     pub old_value: Option<BigInt>,
     pub new_value: Option<BigInt>,
-    pub reason: Option<i32>,
     pub ordinal: Option<u64>,
 }
 
@@ -310,12 +312,148 @@ impl AppConfig {
             } else {
                 None
             },
-            storage_changes: None,
-            balance_changes: None,
-            code_changes: None,
-            nonce_changes: None,
-            gas_changes: None,
-            account_creations: None,
+            storage_changes: Some(
+                c.storage_changes
+                    .into_iter()
+                    .map(|s| self.extract_storage_change(s))
+                    .collect(),
+            ),
+            balance_changes: Some(
+                c.balance_changes
+                    .into_iter()
+                    .map(|b| self.extract_balance_change(b))
+                    .collect(),
+            ),
+            code_changes: Some(
+                c.code_changes
+                    .into_iter()
+                    .map(|cc| self.extract_code_change(cc))
+                    .collect(),
+            ),
+            nonce_changes: Some(
+                c.nonce_changes
+                    .into_iter()
+                    .map(|n| self.extract_nonce_change(n))
+                    .collect(),
+            ),
+            gas_changes: Some(
+                c.gas_changes
+                    .into_iter()
+                    .map(|g| self.extract_gas_change(g))
+                    .collect(),
+            ),
+            account_creations: Some(
+                c.account_creations
+                    .into_iter()
+                    .map(|a| self.extract_account_creation(a))
+                    .collect(),
+            ),
+        }
+    }
+
+    fn extract_storage_change(&self, s: StorageChange) -> ExtractedStorageChange {
+        let cfg = &self.block.system_calls.storage_changes;
+        ExtractedStorageChange {
+            address: if cfg.address { Some(s.address) } else { None },
+            key: if cfg.key { Some(s.key) } else { None },
+            old_value: if cfg.old_value {
+                Some(s.old_value)
+            } else {
+                None
+            },
+            new_value: if cfg.new_value {
+                Some(s.new_value)
+            } else {
+                None
+            },
+            ordinal: if cfg.ordinal { Some(s.ordinal) } else { None },
+        }
+    }
+
+    fn extract_balance_change(&self, b: BalanceChange) -> ExtractedBalanceChange {
+        let cfg = &self.block.system_calls.balance_changes;
+        ExtractedBalanceChange {
+            address: if cfg.address { Some(b.address) } else { None },
+            old_value: if cfg.old_value { b.old_value } else { None },
+            new_value: if cfg.new_value { b.new_value } else { None },
+            reason: if cfg.reason { Some(b.reason) } else { None },
+            ordinal: if cfg.ordinal { Some(b.ordinal) } else { None },
+        }
+    }
+
+    fn extract_nonce_change(&self, n: NonceChange) -> ExtractedNonceChange {
+        let cfg = &self.block.system_calls.nonce_changes;
+        ExtractedNonceChange {
+            address: if cfg.address { Some(n.address) } else { None },
+            old_value: if cfg.old_value {
+                Some(BigInt {
+                    bytes: n.old_value.to_be_bytes().to_vec(),
+                })
+            } else {
+                None
+            },
+            new_value: if cfg.new_value {
+                Some(BigInt {
+                    bytes: n.new_value.to_be_bytes().to_vec(),
+                })
+            } else {
+                None
+            },
+            ordinal: if cfg.ordinal { Some(n.ordinal) } else { None },
+        }
+    }
+
+    fn extract_code_change(&self, cc: CodeChange) -> ExtractedCodeChange {
+        let cfg = &self.block.system_calls.code_changes;
+        ExtractedCodeChange {
+            address: if cfg.address { Some(cc.address) } else { None },
+            old_hash: if cfg.old_hash {
+                Some(cc.old_hash)
+            } else {
+                None
+            },
+            old_code: if cfg.old_code {
+                Some(cc.old_code)
+            } else {
+                None
+            },
+            new_hash: if cfg.new_hash {
+                Some(cc.new_hash)
+            } else {
+                None
+            },
+            new_code: if cfg.new_code {
+                Some(cc.new_code)
+            } else {
+                None
+            },
+            ordinal: cc.ordinal,
+        }
+    }
+
+    fn extract_gas_change(&self, g: GasChange) -> ExtractedGasChange {
+        let cfg = &self.block.system_calls.gas_changes;
+        ExtractedGasChange {
+            old_value: if cfg.old_value {
+                Some(g.old_value)
+            } else {
+                None
+            },
+            new_value: if cfg.new_value {
+                Some(g.new_value)
+            } else {
+                None
+            },
+            reason: if cfg.reason { Some(g.reason) } else { None },
+            ordinal: if cfg.ordinal { Some(g.ordinal) } else { None },
+        }
+    }
+
+    fn extract_account_creation(&self, a: AccountCreation) -> ExtractedAccountCreations {
+        let cfg = &self.block.system_calls.account_creations;
+        ExtractedAccountCreations {
+            account: if cfg.account { Some(a.account) } else { None },
+            ordinal: if cfg.ordinal { Some(a.ordinal) } else { None },
         }
     }
 }
