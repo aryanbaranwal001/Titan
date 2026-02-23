@@ -20,6 +20,7 @@ pub struct ExtractedBlock {
     pub blockheader: Option<ExtractedBlockHeader>,
     pub system_calls: Option<Vec<ExtractedSystemCall>>,
     pub uncles: Option<Vec<ExtractedUncleBlockHeader>>,
+    pub transaction_traces: Option<Vec<ExtractedTransactionTraces>>,
 }
 
 //why the fuck are we even using Deserialize
@@ -51,6 +52,108 @@ pub struct ExtractedBlockHeader {
     pub excess_blob_gas: Option<u64>,
     pub parent_beacon_root: Option<Vec<u8>>,
     pub requests_hash: Option<Vec<u8>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedTransactionTraces {
+    pub to: Option<Vec<u8>>,
+    pub nonce: Option<u64>,
+    pub gas_price: Option<BigInt>,
+    pub gas_limit: Option<u64>,
+    pub value: Option<BigInt>,
+    pub input: Option<Vec<u8>>,
+    pub v: Option<Vec<u8>>,
+    pub r: Option<Vec<u8>>,
+    pub s: Option<Vec<u8>>,
+    pub gas_used: Option<u64>,
+    pub r#type: Option<i32>,
+    pub max_fee_per_gas: Option<BigInt>,
+    pub max_priority_fee_per_gas: Option<BigInt>,
+    pub index: Option<u32>,
+    pub hash: Option<Vec<u8>>,
+    pub from: Option<Vec<u8>>,
+    pub return_data: Option<Vec<u8>>,
+    pub public_key: Option<Vec<u8>>,
+    pub begin_ordinal: Option<u64>,
+    pub end_ordinal: Option<u64>,
+    pub status: Option<i32>,
+    pub blob_gas: Option<u64>,
+    pub blob_gas_fee_cap: Option<BigInt>,
+    pub blob_hashes: Option<Vec<Vec<u8>>>,
+
+    pub access_list: Option<Vec<ExtractedAccessTuple>>,
+    pub receipt: Option<ExtractedTransactionReceipt>,
+    pub calls: Option<Vec<ExtractedTracsactionTraceCall>>,
+    pub set_code_authorizations: Option<Vec<ExtractedSetCodeAuthorization>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedSetCodeAuthorization {
+    pub discarded: Option<bool>,
+    pub chain_id: Option<Vec<u8>>,
+    pub address: Option<Vec<u8>>,
+    pub nonce: Option<u64>,
+    pub v: Option<u32>,
+    pub r: Option<Vec<u8>>,
+    pub s: Option<Vec<u8>>,
+    pub authority: Option<Vec<u8>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedTracsactionTraceCall {
+    pub index: Option<u32>,
+    pub parent_index: Option<u32>,
+    pub depth: Option<u32>,
+    pub call_type: Option<i32>,
+    pub caller: Option<Vec<u8>>,
+    pub address: Option<Vec<u8>>,
+    pub address_delegates_to: Option<Vec<u8>>,
+    pub value: Option<BigInt>,
+    pub gas_limit: Option<u64>,
+    pub gas_consumed: Option<u64>,
+    pub return_data: Option<Vec<u8>>,
+    pub input: Option<Vec<u8>>,
+    pub executed_code: Option<bool>,
+    pub suicide: Option<bool>,
+    pub keccak_preimages: Option<HashMap<String, String>>,
+    pub status_failed: Option<bool>,
+    pub status_reverted: Option<bool>,
+    pub failure_reason: Option<String>,
+    pub state_reverted: Option<bool>,
+    pub begin_ordinal: Option<u64>,
+    pub end_ordinal: Option<u64>,
+    pub storage_changes: Option<Vec<ExtractedStorageChange>>,
+    pub balance_changes: Option<Vec<ExtractedBalanceChange>>,
+    pub nonce_changes: Option<Vec<ExtractedNonceChange>>,
+    pub code_changes: Option<Vec<ExtractedCodeChange>>,
+    pub gas_changes: Option<Vec<ExtractedGasChange>>,
+    pub account_creations: Option<Vec<ExtractedAccountCreations>>,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct ExtractedTransactionReceipt {
+    pub state_root: Option<Vec<u8>>,
+    pub cumulative_gas_used: Option<u64>,
+    pub logs_bloom: Option<Vec<u8>>,
+    pub logs: Option<Vec<ExtractedLog>>,
+    pub blob_gas_used: Option<u64>,
+    pub blob_gas_price: Option<BigInt>,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct ExtractedLog {
+    pub address: Option<Vec<u8>>,
+    pub topics: Option<Vec<Vec<u8>>>,
+    pub data: Option<Vec<u8>>,
+    pub index: Option<u32>,
+    pub block_index: Option<u32>,
+    pub ordinal: Option<u64>,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct ExtractedAccessTuple {
+    pub address: Option<Vec<u8>>,
+    pub storage_keys: Option<Vec<Vec<u8>>>,
 }
 
 #[derive(Deserialize, Debug)]

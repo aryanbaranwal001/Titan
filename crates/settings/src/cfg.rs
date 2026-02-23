@@ -11,7 +11,7 @@ pub struct BlockCfg {
     pub blockheader: BlockHeaderCfg,
     pub system_calls: SystemCallCfg,
     pub uncles: UncleBlockHeaderCfg,
-    // pub transaction_traces: TransactionTraces,
+    pub transaction_traces: TransactionTraceCfg,
     // pub balance_changes: BalanceChanges,
     // pub code_changes: CodeChanges,
     // pub withdrawals: Withdrawals,
@@ -189,7 +189,7 @@ pub struct AccountCreationsCfg {
 // }
 
 #[derive(Deserialize, Debug, Default)]
-pub struct TransactionTraces {
+pub struct TransactionTraceCfg {
     pub enabled: bool,
     pub to: bool,
     pub nonce: bool,
@@ -215,20 +215,84 @@ pub struct TransactionTraces {
     pub blob_gas: bool,
     pub blob_gas_fee_cap: bool,
     pub blob_hashes: bool,
-    pub receipt: Receipt,
-    // pub calls: Call,
-    pub set_code_authorizations: EnabledOnly,
+
+    pub access_list: AccessTupleCfg,
+    pub receipt: TransactionReceiptCfg,
+    pub calls: TracsactionTraceCallCfg, // transaction call cfg
+    pub set_code_authorizations: SetCodeAuthorizationCfg,
 }
+
 #[derive(Deserialize, Debug, Default)]
-pub struct Receipt {
+pub struct SetCodeAuthorizationCfg {
+    pub discarded: bool,
+    pub chain_id: bool,
+    pub address: bool,
+    pub nonce: bool,
+    pub v: bool,
+    pub r: bool,
+    pub s: bool,
+    pub authority: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct TracsactionTraceCallCfg {
     pub enabled: bool,
+
+    pub index: bool,
+    pub parent_index: bool,
+    pub depth: bool,
+    pub call_type: bool,
+    pub caller: bool,
+    pub address: bool,
+    pub address_delegates_to: bool,
+    pub value: bool,
+    pub gas_limit: bool,
+    pub gas_consumed: bool,
+    pub return_data: bool,
+    pub input: bool,
+    pub executed_code: bool,
+    pub suicide: bool,
+    pub keccak_preimages: bool,
+    pub status_failed: bool,
+    pub status_reverted: bool,
+    pub failure_reason: bool,
+    pub state_reverted: bool,
+    pub begin_ordinal: bool,
+    pub end_ordinal: bool,
+    pub storage_changes: StorageChangesCfg,
+    pub balance_changes: BalanceChangesCfg,
+    pub nonce_changes: NonceChangesCfg,
+    pub code_changes: CodeChangesCfg,
+    pub gas_changes: GasChangesCfg,
+    pub account_creations: AccountCreationsCfg,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct TransactionReceiptCfg {
     pub state_root: bool,
     pub cumulative_gas_used: bool,
     pub logs_bloom: bool,
+    pub logs: LogCfg,
     pub blob_gas_used: bool,
     pub blob_gas_price: bool,
-    pub logs: EnabledOnly,
 }
+
+#[derive(Deserialize, Debug, Default)]
+pub struct LogCfg {
+    pub address: bool,
+    pub topics: bool,
+    pub data: bool,
+    pub index: bool,
+    pub block_index: bool,
+    pub ordinal: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct AccessTupleCfg {
+    pub address: bool,
+    pub storage_keys: bool,
+}
+
 #[derive(Deserialize, Debug, Default)]
 pub struct CodeChanges {
     pub enabled: bool,
