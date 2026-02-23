@@ -263,7 +263,6 @@ impl AppConfig {
         }
     }
 
-    // type of input is blockheader only
     pub fn extract_uncles(&self, h: BlockHeader) -> ExtractedUncleBlockHeader {
         let cfg = &self.block.blockheader;
 
@@ -612,6 +611,7 @@ impl fmt::Display for ExtractedBlock {
             let header_str = format!("{}", header).replace('\n', "\n  ");
             writeln!(f, "  blockheader: {}", header_str)?;
         }
+
         if let Some(ref calls) = self.system_calls {
             writeln!(f, "  system_calls: [")?;
             for call in calls {
@@ -620,11 +620,62 @@ impl fmt::Display for ExtractedBlock {
             }
             writeln!(f, "  ],")?;
         }
+
+        if let Some(ref headers) = self.uncles {
+            writeln!(f, "  uncles: [")?;
+            for header in headers {
+                let header_str = format!("  {}", header).replace('\n', "\n  ");
+                writeln!(f, "{},", header_str)?;
+            }
+            writeln!(f, "  ],")?;
+        }
+
         write!(f, "}}")
     }
 }
 
 impl fmt::Display for ExtractedBlockHeader {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Header {{")?;
+
+        macro_rules! display_field {
+            ($field_name:expr, $value:expr) => {
+                if let Some(ref v) = $value {
+                    writeln!(f, "  {}: {:?},", $field_name, v)?;
+                }
+            };
+        }
+
+        display_field!("parent_hash", self.parent_hash);
+        display_field!("uncle_hash", self.uncle_hash);
+        display_field!("coinbase", self.coinbase);
+        display_field!("state_root", self.state_root);
+        display_field!("transactions_root", self.transactions_root);
+        display_field!("receipt_root", self.receipt_root);
+        display_field!("logs_bloom", self.logs_bloom);
+        display_field!("difficulty", self.difficulty);
+        display_field!("total_difficulty", self.total_difficulty);
+        display_field!("number", self.number);
+        display_field!("gas_limit", self.gas_limit);
+        display_field!("gas_used", self.gas_used);
+        display_field!("timestamp", self.timestamp);
+        display_field!("extra_data", self.extra_data);
+        display_field!("mix_hash", self.mix_hash);
+        display_field!("nonce", self.nonce);
+        display_field!("hash", self.hash);
+        display_field!("base_fee_per_gas", self.base_fee_per_gas);
+        display_field!("withdrawals_root", self.withdrawals_root);
+        display_field!("tx_dependency", self.tx_dependency);
+        display_field!("blob_gas_used", self.blob_gas_used);
+        display_field!("excess_blob_gas", self.excess_blob_gas);
+        display_field!("parent_beacon_root", self.parent_beacon_root);
+        display_field!("requests_hash", self.requests_hash);
+
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedUncleBlockHeader {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "Header {{")?;
 
