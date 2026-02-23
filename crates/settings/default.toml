@@ -14,8 +14,6 @@ size = true         # Total size of the block in bytes
 detail_level = true # Enum indicating if data is BASE or EXTENDED (DetailLevel)
 ver = true          # Version of the block data structure
 
-
-# Block Header
 [block.blockheader]
 enabled = false # Toggle entire block header object
 
@@ -122,7 +120,32 @@ ordinal = false
 
 
 [block.uncles]
-enabled = false # Repeated BlockHeader: Toggle inclusion of ommer headers
+enabled = false # Toggle entire block header object
+
+parent_hash = false        # Hash of the previous block
+uncle_hash = false         # Hash of the uncles (ommer) list
+coinbase = false           # Address of the miner/validator
+state_root = false         # Root of the state trie
+transactions_root = false  # Root of the transaction trie
+receipt_root = false       # Root of the transaction receipt trie
+logs_bloom = false         # Bloom filter for log searching
+difficulty = false         # Mining difficulty (BigInt)
+total_difficulty = false   # Cumulative difficulty (BigInt, deprecated)
+number = false             # Duplicate of block height for header context
+gas_limit = false          # Maximum gas allowed in this block
+gas_used = false           # Total gas actually consumed
+timestamp = false          # Unix timestamp (google.protobuf.Timestamp)
+extra_data = false         # Arbitrary data field
+mix_hash = false           # PoW hash or RANDAO
+nonce = false              # Proof-of-work seal
+hash = false               # Block hash (calculated from header)
+base_fee_per_gas = false   # Minimum fee per gas (BigInt, EIP-1559)
+withdrawals_root = false   # Root of the beacon chain withdrawals trie
+tx_dependency = false      # Parallel execution dependency (Uint64NestedArray)
+blob_gas_used = false      # Gas consumed by EIP-4844 blobs
+excess_blob_gas = false    # Running total of unused blob gas capacity
+parent_beacon_root = false # Root of the parent beacon block
+requests_hash = false      # Hash of execution layer requests
 
 [block.transaction_traces]
 enabled = false                  # Toggle inclusion of transaction execution traces
