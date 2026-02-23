@@ -1,7 +1,10 @@
 #![allow(unused)]
 use cfg::{BlockCfg, BlockHeaderCfg};
 use config::{Case, Config, ConfigError, Environment, File};
-use extract::{DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall};
+use extract::{
+    DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall,
+    ExtractedTransactionTraces,
+};
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::{Deserialize, Serialize};
 
@@ -70,6 +73,16 @@ impl AppConfig {
                     .map(|c| self.extract_uncles(c))
                     .collect();
 
+                Some(extracted)
+            } else {
+                None
+            },
+            transaction_traces: if cfg.transaction_traces.enabled {
+                let extracted: Vec<ExtractedTransactionTraces> = block
+                    .transaction_traces
+                    .into_iter()
+                    .map(|t| self.extract_transaction_traces(t))
+                    .collect();
                 Some(extracted)
             } else {
                 None
