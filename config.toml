@@ -1,114 +1,114 @@
 
 [block]
 hash = true          # The unique 32-byte hash identifying the block
-number = false       # The block height (index) in the blockchain
-size = false         # Total size of the block in bytes
-detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
-ver = false          # Version of the block data structure
+number = true       # The block height (index) in the blockchain
+size = true         # Total size of the block in bytes
+detail_level = true # Enum indicating if data is BASE or EXTENDED (DetailLevel)
+ver = true          # Version of the block data structure
 
 
 # Block Header
 [block.blockheader]
-enabled = false # Toggle entire block header object
+enabled = true # Toggle entire block header object
 
-parent_hash = false        # Hash of the previous block
-uncle_hash = false         # Hash of the uncles (ommer) list
-coinbase = false           # Address of the miner/validator
-state_root = false         # Root of the state trie
-transactions_root = false  # Root of the transaction trie
-receipt_root = false       # Root of the transaction receipt trie
-logs_bloom = false         # Bloom filter for log searching
-difficulty = false         # Mining difficulty (BigInt)
-total_difficulty = false   # Cumulative difficulty (BigInt, deprecated)
-number = false             # Duplicate of block height for header context
-gas_limit = false          # Maximum gas allowed in this block
-gas_used = false           # Total gas actually consumed
-timestamp = false          # Unix timestamp (google.protobuf.Timestamp)
-extra_data = false         # Arbitrary data field
-mix_hash = false           # PoW hash or RANDAO
-nonce = false              # Proof-of-work seal
-hash = false               # Block hash (calculated from header)
-base_fee_per_gas = false   # Minimum fee per gas (BigInt, EIP-1559)
-withdrawals_root = false   # Root of the beacon chain withdrawals trie
-tx_dependency = false      # Parallel execution dependency (Uint64NestedArray)
-blob_gas_used = false      # Gas consumed by EIP-4844 blobs
-excess_blob_gas = false    # Running total of unused blob gas capacity
-parent_beacon_root = false # Root of the parent beacon block
-requests_hash = false      # Hash of execution layer requests
+parent_hash = true        # Hash of the previous block
+uncle_hash = true         # Hash of the uncles (ommer) list
+coinbase = true           # Address of the miner/validator
+state_root = true         # Root of the state trie
+transactions_root = true  # Root of the transaction trie
+receipt_root = true       # Root of the transaction receipt trie
+logs_bloom = true         # Bloom filter for log searching
+difficulty = true         # Mining difficulty (BigInt)
+total_difficulty = true   # Cumulative difficulty (BigInt, deprecated)
+number = true             # Duplicate of block height for header context
+gas_limit = true          # Maximum gas allowed in this block
+gas_used = true           # Total gas actually consumed
+timestamp = true          # Unix timestamp (google.protobuf.Timestamp)
+extra_data = true         # Arbitrary data field
+mix_hash = true           # PoW hash or RANDAO
+nonce = true              # Proof-of-work seal
+hash = true               # Block hash (calculated from header)
+base_fee_per_gas = true   # Minimum fee per gas (BigInt, EIP-1559)
+withdrawals_root = true   # Root of the beacon chain withdrawals trie
+tx_dependency = true      # Parallel execution dependency (Uint64NestedArray)
+blob_gas_used = true      # Gas consumed by EIP-4844 blobs
+excess_blob_gas = true    # Running total of unused blob gas capacity
+parent_beacon_root = true # Root of the parent beacon block
+requests_hash = true      # Hash of execution layer requests
 
 
 # Block System Calls
 [block.system_calls]
 enabled = true # Toggle internal calls
 
-index = false                # Call index
-parent_index = false         # Parent call index
-depth = false                # Call stack depth
-call_type = false            # Type (CALL, DELEGATE, CREATE, etc.)
-caller = false               # Address initiating the call
-address = false              # Target address
-address_delegates_to = false # Effective address for DELEGATECALL
-value = false                # Ether sent (BigInt)
-gas_limit = false            # Gas allocated
-gas_consumed = false         # Gas used
-return_data = false          # Data returned
-input = false                # Call data
-executed_code = false        # If code was run
-suicide = false              # If SELFDESTRUCT occurred
-keccak_preimages = false     # Map of hash -> preimage
-status_failed = false        # If execution failed
-status_reverted = false      # If execution reverted
-failure_reason = false       # Error message
-state_reverted = false       # If state changes rolled back
-begin_ordinal = false        # Start order
-end_ordinal = false          # End order
+index = true                # Call index
+parent_index = true         # Parent call index
+depth = true                # Call stack depth
+call_type = true            # Type (CALL, DELEGATE, CREATE, etc.)
+caller = true               # Address initiating the call
+address = true              # Target address
+address_delegates_to = true # Effective address for DELEGATECALL
+value = true                # Ether sent (BigInt)
+gas_limit = true            # Gas allocated
+gas_consumed = true         # Gas used
+return_data = true          # Data returned
+input = true                # Call data
+executed_code = true        # If code was run
+suicide = true              # If SELFDESTRUCT occurred
+keccak_preimages = true     # Map of hash -> preimage
+status_failed = true        # If execution failed
+status_reverted = true      # If execution reverted
+failure_reason = true       # Error message
+state_reverted = true       # If state changes rolled back
+begin_ordinal = true        # Start order
+end_ordinal = true          # End order
 
 
 [block.system_calls.storage_changes]
-enabled = false # Toggle storage slot modifications
+enabled = true # Toggle storage slot modifications
 
-address = false   # Address modified
-key = false       # Storage key
-old_value = false # Value before
-new_value = false # Value after
-ordinal = false   # Order
+address = true   # Address modified
+key = true       # Storage key
+old_value = true # Value before
+new_value = true # Value after
+ordinal = true   # Order
 
 [block.system_calls.balance_changes]
-enabled = false # Toggle Ether balance movements (BalanceChange)
+enabled = true # Toggle Ether balance movements (BalanceChange)
 
-address = false   # Address changed
-old_value = false # BigInt before
-new_value = false # BigInt after
-reason = false    # Reason enum
-ordinal = false   # Order
+address = true   # Address changed
+old_value = true # BigInt before
+new_value = true # BigInt after
+reason = true    # Reason enum
+ordinal = true   # Order
 
 [block.system_calls.nonce_changes]
-enabled = false # Toggle account nonce updates (NonceChange)
+enabled = true # Toggle account nonce updates (NonceChange)
 
-address = false   # Address changed
-old_value = false # Nonce before
-new_value = false # Nonce after
-ordinal = false   # Order
+address = true   # Address changed
+old_value = true # Nonce before
+new_value = true # Nonce after
+ordinal = true   # Order
 
 
 [block.system_calls.code_changes]
-address = false
-old_hash = false
-old_code = false
-new_hash = false
-new_code = false
-ordinal = false
+address = true
+old_hash = true
+old_code = true
+new_hash = true
+new_code = true
+ordinal = true
 
 [block.system_calls.gas_changes]
-enabled = false # Toggle gas consumption details (GasChange)
+enabled = true # Toggle gas consumption details (GasChange)
 
-old_value = false # Gas before
-new_value = false # Gas after
-reason = false    # Reason enum
-ordinal = false   # Order
+old_value = true # Gas before
+new_value = true # Gas after
+reason = true    # Reason enum
+ordinal = true   # Order
 
 [block.system_calls.account_creations]
-enabled = false
+enabled = true
 
-account = false
-ordinal = false
+account = true
+ordinal = true

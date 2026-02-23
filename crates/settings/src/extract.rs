@@ -19,11 +19,42 @@ pub struct ExtractedBlock {
     pub ver: Option<i32>,
     pub blockheader: Option<ExtractedBlockHeader>,
     pub system_calls: Option<Vec<ExtractedSystemCall>>,
+    pub uncles: Option<Vec<ExtractedUncleBlockHeader>>,
 }
 
 //why the fuck are we even using Deserialize
 #[derive(Deserialize, Debug)]
 pub struct ExtractedBlockHeader {
+    pub parent_hash: Option<Vec<u8>>,
+    pub uncle_hash: Option<Vec<u8>>,
+    pub coinbase: Option<Vec<u8>>,
+    pub state_root: Option<Vec<u8>>,
+    pub transactions_root: Option<Vec<u8>>,
+    pub receipt_root: Option<Vec<u8>>,
+    pub logs_bloom: Option<Vec<u8>>,
+    pub difficulty: Option<BigInt>,
+    pub total_difficulty: Option<BigInt>,
+    pub number: Option<u64>,
+    pub gas_limit: Option<u64>,
+    pub gas_used: Option<u64>,
+
+    #[serde(with = "option_timestamp")]
+    pub timestamp: Option<Timestamp>,
+    pub extra_data: Option<Vec<u8>>,
+    pub mix_hash: Option<Vec<u8>>,
+    pub nonce: Option<u64>,
+    pub hash: Option<Vec<u8>>,
+    pub base_fee_per_gas: Option<BigInt>,
+    pub withdrawals_root: Option<Vec<u8>>,
+    pub tx_dependency: Option<Uint64NestedArray>,
+    pub blob_gas_used: Option<u64>,
+    pub excess_blob_gas: Option<u64>,
+    pub parent_beacon_root: Option<Vec<u8>>,
+    pub requests_hash: Option<Vec<u8>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedUncleBlockHeader {
     pub parent_hash: Option<Vec<u8>>,
     pub uncle_hash: Option<Vec<u8>>,
     pub coinbase: Option<Vec<u8>>,
@@ -231,6 +262,106 @@ impl AppConfig {
             },
         }
     }
+
+    // type of input is blockheader only
+    pub fn extract_uncles(&self, h: BlockHeader) -> ExtractedUncleBlockHeader {
+        let cfg = &self.block.blockheader;
+
+        ExtractedUncleBlockHeader {
+            parent_hash: if cfg.parent_hash {
+                Some(h.parent_hash)
+            } else {
+                None
+            },
+            uncle_hash: if cfg.uncle_hash {
+                Some(h.uncle_hash)
+            } else {
+                None
+            },
+            coinbase: if cfg.coinbase { Some(h.coinbase) } else { None },
+            state_root: if cfg.state_root {
+                Some(h.state_root)
+            } else {
+                None
+            },
+            transactions_root: if cfg.transactions_root {
+                Some(h.transactions_root)
+            } else {
+                None
+            },
+            receipt_root: if cfg.receipt_root {
+                Some(h.receipt_root)
+            } else {
+                None
+            },
+            logs_bloom: if cfg.logs_bloom {
+                Some(h.logs_bloom)
+            } else {
+                None
+            },
+            difficulty: if cfg.difficulty { h.difficulty } else { None },
+            total_difficulty: if cfg.total_difficulty {
+                h.total_difficulty
+            } else {
+                None
+            },
+
+            number: if cfg.number { Some(h.number) } else { None },
+            gas_limit: if cfg.gas_limit {
+                Some(h.gas_limit)
+            } else {
+                None
+            },
+            gas_used: if cfg.gas_used { Some(h.gas_used) } else { None },
+
+            timestamp: if cfg.timestamp { h.timestamp } else { None },
+            extra_data: if cfg.extra_data {
+                Some(h.extra_data)
+            } else {
+                None
+            },
+            mix_hash: if cfg.mix_hash { Some(h.mix_hash) } else { None },
+            nonce: if cfg.nonce { Some(h.nonce) } else { None },
+            hash: if cfg.hash { Some(h.hash) } else { None },
+            base_fee_per_gas: if cfg.base_fee_per_gas {
+                h.base_fee_per_gas
+            } else {
+                None
+            },
+
+            withdrawals_root: if cfg.withdrawals_root {
+                Some(h.withdrawals_root)
+            } else {
+                None
+            },
+            tx_dependency: if cfg.tx_dependency {
+                h.tx_dependency
+            } else {
+                None
+            },
+            blob_gas_used: if cfg.blob_gas_used {
+                h.blob_gas_used
+            } else {
+                None
+            },
+            excess_blob_gas: if cfg.excess_blob_gas {
+                h.excess_blob_gas
+            } else {
+                None
+            },
+            parent_beacon_root: if cfg.parent_beacon_root {
+                Some(h.parent_beacon_root)
+            } else {
+                None
+            },
+            requests_hash: if cfg.requests_hash {
+                Some(h.requests_hash)
+            } else {
+                None
+            },
+        }
+    }
+
     pub fn extract_system_call(&self, c: Call, cfg: &SystemCallCfg) -> ExtractedSystemCall {
         let cfg = &self.block.system_calls;
 
@@ -781,7 +912,6 @@ impl fmt::Display for ExtractedAccountCreations {
         write!(f, "}}")
     }
 }
-
 
 #[derive(Deserialize)]
 #[serde(remote = "prost_types::Timestamp")]
