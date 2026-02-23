@@ -4,6 +4,8 @@ use config::{Case, Config, ConfigError, Environment, File};
 use extract::{DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall};
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::{Deserialize, Serialize};
+
+use crate::extract::ExtractedUncleBlockHeader;
 pub mod cfg;
 pub mod extract;
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
@@ -55,6 +57,17 @@ impl AppConfig {
                     .system_calls
                     .into_iter()
                     .map(|c| self.extract_system_call(c, &cfg.system_calls))
+                    .collect();
+
+                Some(extracted)
+            } else {
+                None
+            },
+            uncles: if cfg.uncles.enabled {
+                let extracted: Vec<ExtractedUncleBlockHeader> = block
+                    .uncles
+                    .into_iter()
+                    .map(|c| self.extract_uncles(c))
                     .collect();
 
                 Some(extracted)

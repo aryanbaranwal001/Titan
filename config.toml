@@ -39,7 +39,7 @@ requests_hash = false      # Hash of execution layer requests
 
 # Block System Calls
 [block.system_calls]
-enabled = true # Toggle internal calls
+enabled = false # Toggle internal calls
 
 index = false                # Call index
 parent_index = false         # Parent call index

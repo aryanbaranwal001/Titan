@@ -10,7 +10,7 @@ pub struct BlockCfg {
 
     pub blockheader: BlockHeaderCfg,
     pub system_calls: SystemCallCfg,
-    // pub uncles: BlockHeader,
+    pub uncles: UncleBlockHeaderCfg,
     // pub transaction_traces: TransactionTraces,
     // pub balance_changes: BalanceChanges,
     // pub code_changes: CodeChanges,
@@ -19,6 +19,36 @@ pub struct BlockCfg {
 
 #[derive(Deserialize, Debug, Default)]
 pub struct BlockHeaderCfg {
+    pub enabled: bool,
+
+    pub parent_hash: bool,
+    pub uncle_hash: bool,
+    pub coinbase: bool,
+    pub state_root: bool,
+    pub transactions_root: bool,
+    pub receipt_root: bool,
+    pub logs_bloom: bool,
+    pub difficulty: bool,
+    pub total_difficulty: bool,
+    pub number: bool,
+    pub gas_limit: bool,
+    pub gas_used: bool,
+    pub timestamp: bool,
+    pub extra_data: bool,
+    pub mix_hash: bool,
+    pub nonce: bool,
+    pub hash: bool,
+    pub base_fee_per_gas: bool,
+    pub withdrawals_root: bool,
+    pub tx_dependency: bool,
+    pub blob_gas_used: bool,
+    pub excess_blob_gas: bool,
+    pub parent_beacon_root: bool,
+    pub requests_hash: bool,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct UncleBlockHeaderCfg {
     pub enabled: bool,
 
     pub parent_hash: bool,
