@@ -141,8 +141,18 @@ pub struct TransactionTraceCfg {
 
     pub access_list: AccessTupleCfg,
     pub receipt: TransactionReceiptCfg,
-    pub calls: TracsactionTraceCallCfg, // transaction call cfg
+    pub calls: TracsactionTraceCallCfg,
     pub set_code_authorizations: SetCodeAuthorizationCfg,
+}
+
+#[derive(Deserialize, Debug, Default)]
+pub struct WithdrawalCfg {
+    pub enabled: bool,
+
+    pub index: bool,
+    pub validator_index: bool,
+    pub address: bool,
+    pub amount: bool,
 }
 
 #[derive(Deserialize, Debug, Default)]
@@ -204,36 +214,6 @@ pub struct AccountCreationsCfg {
     pub account: bool,
     pub ordinal: bool,
 }
-
-// #[derive(Deserialize, Debug, Default)]
-// pub struct Call {
-//     pub enabled: bool,
-//     pub index: bool,
-//     pub parent_index: bool,
-//     pub depth: bool,
-//     pub call_type: bool,
-//     pub caller: bool,
-//     pub address: bool,
-//     pub address_delegates_to: bool,
-//     pub value: bool,
-//     pub gas_limit: bool,
-//     pub gas_consumed: bool,
-//     pub return_data: bool,
-//     pub input: bool,
-//     pub executed_code: bool,
-//     pub suicide: bool,
-//     pub keccak_preimages: bool,
-//     pub status_failed: bool,
-//     pub status_reverted: bool,
-//     pub failure_reason: bool,
-//     pub state_reverted: bool,
-//     pub begin_ordinal: bool,
-//     pub end_ordinal: bool,
-//     pub storage_changes: EnabledOnly,
-//     pub balance_changes: BalanceChanges,
-//     pub nonce_changes: EnabledOnly,
-//     pub gas_changes: EnabledOnly,
-// }
 
 #[derive(Deserialize, Debug, Default)]
 pub struct SetCodeAuthorizationCfg {
@@ -314,41 +294,6 @@ pub struct AccessTupleCfg {
 
     pub address: bool,
     pub storage_keys: bool,
-}
-
-#[derive(Deserialize, Debug, Default)]
-pub struct CodeChanges {
-    pub enabled: bool,
-    pub address: bool,
-    pub old_hash: bool,
-    pub old_code: bool,
-    pub new_hash: bool,
-    pub new_code: bool,
-    pub ordinal: bool,
-}
-#[derive(Deserialize, Debug, Default)]
-pub struct WithdrawalCfg {
-    pub enabled: bool,
-
-    pub index: bool,
-    pub validator_index: bool,
-    pub address: bool,
-    pub amount: bool,
-}
-#[derive(Deserialize, Debug, Default)]
-pub struct EnabledOnly {
-    pub enabled: bool,
-}
-
-#[derive(Deserialize, Debug, Default)]
-#[serde(default)]
-pub struct BalanceChanges {
-    pub enabled: bool,
-    pub address: bool,
-    pub old_value: bool,
-    pub new_value: bool,
-    pub reason: bool,
-    pub ordinal: bool,
 }
 
 // enabled is not used for many of the inner subfields
