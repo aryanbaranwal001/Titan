@@ -306,16 +306,25 @@ r = false
 s = false
 authority = false
 
+# -------------------------------
+# BalanceChanges
+# -------------------------------
 [block.balance_changes]
 enabled = false
+
 address = false
 old_value = false
 new_value = false
 reason = false
 ordinal = false
 
+
+# -------------------------------
+# CodeChanges
+# -------------------------------
 [block.code_changes]
 enabled = false
+
 address = false
 old_hash = false
 old_code = false
@@ -323,8 +332,12 @@ new_hash = false
 new_code = false
 ordinal = false
 
+# -------------------------------
+# withdrawals
+# -------------------------------
 [block.withdrawals]
 enabled = false
+
 index = false
 validator_index = false
 address = false
