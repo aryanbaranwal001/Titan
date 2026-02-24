@@ -14,7 +14,6 @@ use std::{collections::HashMap, fmt};
 pub mod extract;
 pub mod format;
 
-// this is incomplete
 #[derive(Deserialize, Debug)]
 pub struct ExtractedBlock {
     pub hash: Option<Vec<u8>>,
