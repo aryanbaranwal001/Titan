@@ -237,6 +237,8 @@ pub struct AccountCreationsCfg {
 
 #[derive(Deserialize, Debug, Default)]
 pub struct SetCodeAuthorizationCfg {
+    pub enabled: bool,
+
     pub discarded: bool,
     pub chain_id: bool,
     pub address: bool,
@@ -272,6 +274,7 @@ pub struct TracsactionTraceCallCfg {
     pub state_reverted: bool,
     pub begin_ordinal: bool,
     pub end_ordinal: bool,
+
     pub storage_changes: StorageChangesCfg,
     pub balance_changes: BalanceChangesCfg,
     pub nonce_changes: NonceChangesCfg,
@@ -282,16 +285,21 @@ pub struct TracsactionTraceCallCfg {
 
 #[derive(Deserialize, Debug, Default)]
 pub struct TransactionReceiptCfg {
+    pub enabled: bool,
+
     pub state_root: bool,
     pub cumulative_gas_used: bool,
     pub logs_bloom: bool,
-    pub logs: LogCfg,
     pub blob_gas_used: bool,
     pub blob_gas_price: bool,
+
+    pub logs: LogCfg,
 }
 
 #[derive(Deserialize, Debug, Default)]
 pub struct LogCfg {
+    pub enabled: bool,
+
     pub address: bool,
     pub topics: bool,
     pub data: bool,
@@ -302,6 +310,8 @@ pub struct LogCfg {
 
 #[derive(Deserialize, Debug, Default)]
 pub struct AccessTupleCfg {
+    pub enabled: bool,
+
     pub address: bool,
     pub storage_keys: bool,
 }
