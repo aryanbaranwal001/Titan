@@ -5,7 +5,6 @@ end_block = 24_000_001
 final_blocks_only = true
 
 # Database Inclusion Settings (Hierarchical)
-# Set to 'true' to include the field/message, 'false' to exclude.
 
 [block]
 hash = true         # The unique 32-byte hash identifying the block
@@ -14,6 +13,8 @@ size = true         # Total size of the block in bytes
 detail_level = true # Enum indicating if data is BASE or EXTENDED (DetailLevel)
 ver = true          # Version of the block data structure
 
+#################
+##### BLOCKHEADER
 [block.blockheader]
 enabled = false # Toggle entire block header object
 
@@ -42,7 +43,8 @@ excess_blob_gas = false    # Running total of unused blob gas capacity
 parent_beacon_root = false # Root of the parent beacon block
 requests_hash = false      # Hash of execution layer requests
 
-# Block System Calls
+#################
+##### SYSTEM CALL 
 [block.system_calls]
 enabled = false # Toggle internal calls
 
@@ -118,7 +120,8 @@ enabled = false
 account = false
 ordinal = false
 
-
+############
+##### UNCLES
 [block.uncles]
 enabled = false # Toggle entire block header object
 
@@ -147,6 +150,8 @@ excess_blob_gas = false    # Running total of unused blob gas capacity
 parent_beacon_root = false # Root of the parent beacon block
 requests_hash = false      # Hash of execution layer requests
 
+########################
+##### TRANSACTION TRACES
 [block.transaction_traces]
 enabled = false                  # Toggle inclusion of transaction execution traces
 to = false                       # Destination address
@@ -194,13 +199,13 @@ blob_gas_used = false       # Blob gas used by this transaction
 blob_gas_price = false      # Price for blob gas (BigInt)
 
 [block.transaction_traces.receipt.logs]
-enabled = false    # Toggle event logs
-address = false    # Contract address
-topics = false     # Indexed event parameters
-data = false       # Non-indexed event parameters
-index = false      # Index within the transaction
-blockIndex = false # Index within the block
-ordinal = false    # Global ordering position
+enabled = false     # Toggle event logs
+address = false     # Contract address
+topics = false      # Indexed event parameters
+data = false        # Non-indexed event parameters
+index = false       # Index within the transaction
+block_index = false # Index within the block
+ordinal = false     # Global ordering position
 
 
 [block.transaction_traces.calls]
@@ -256,6 +261,29 @@ old_value = false # Gas before
 new_value = false # Gas after
 reason = false    # Reason enum
 ordinal = false   # Order
+
+[block.transaction_traces.access_list]
+enabled = false # Toggle gas consumption details (GasChange)
+
+address = false
+storage_keys = false
+
+
+[block.transaction_traces.calls.code_changes]
+enabled = false  # Toggle gas consumption details (GasChange)
+address = false
+old_hash = false
+old_code = false
+new_hash = false
+new_code = false
+ordinal = false
+
+
+[block.transaction_traces.calls.account_creations]
+enabled = false # Toggle gas consumption details (GasChange)
+
+account = false
+ordinal = false
 
 [block.balance_changes]
 enabled = false   # Toggle Ether balance movements (BalanceChange)
