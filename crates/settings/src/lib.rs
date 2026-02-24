@@ -1,16 +1,16 @@
 #![allow(unused)]
 use cfg::{BlockCfg, BlockHeaderCfg};
 use config::{Case, Config, ConfigError, Environment, File};
-use extract::{
+use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
+use serde::{Deserialize, Serialize};
+use structure::{
     DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall,
     ExtractedTransactionTraces,
 };
-use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
-use serde::{Deserialize, Serialize};
 
-use crate::extract::ExtractedUncleBlockHeader;
+use crate::structure::ExtractedUncleBlockHeader;
 pub mod cfg;
-pub mod extract;
+pub mod structure;
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
 // the toggle structure used to select which fields to include
 // remains the same. This toggle determines whether we fetch
@@ -27,7 +27,6 @@ pub struct AppConfig {
     pub start_block: i64,
     pub end_block: u64,
     pub final_blocks_only: bool,
-    // block configs
     pub block: BlockCfg,
 }
 
@@ -59,7 +58,7 @@ impl AppConfig {
                 let extracted: Vec<ExtractedSystemCall> = block
                     .system_calls
                     .into_iter()
-                    .map(|c| self.extract_system_call(c, &cfg.system_calls))
+                    .map(|c| self.extract_system_call(c))
                     .collect();
 
                 Some(extracted)
