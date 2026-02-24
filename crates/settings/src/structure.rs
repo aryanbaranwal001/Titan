@@ -26,6 +26,17 @@ pub struct ExtractedBlock {
     pub system_calls: Option<Vec<ExtractedSystemCall>>,
     pub uncles: Option<Vec<ExtractedUncleBlockHeader>>,
     pub transaction_traces: Option<Vec<ExtractedTransactionTraces>>,
+    pub balance_changes: Option<Vec<ExtractedBalanceChange>>,
+    pub code_changes: Option<Vec<ExtractedCodeChange>>,
+    pub withdrawals: Option<Vec<ExtractedWithdrawal>>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ExtractedWithdrawal {
+    pub index: Option<u64>,
+    pub validator_index: Option<u64>,
+    pub address: Option<Vec<u8>>,
+    pub amount: Option<u64>,
 }
 
 #[derive(Deserialize, Debug)]
