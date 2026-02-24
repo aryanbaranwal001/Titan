@@ -4,8 +4,8 @@ use config::{Case, Config, ConfigError, Environment, File};
 use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
 use serde::{Deserialize, Serialize};
 use structure::{
-    DetailLevel, ExtractedBlock, ExtractedBlockHeader, ExtractedSystemCall,
-    ExtractedTransactionTraces,
+    DetailLevel, ExtractedBalanceChange, ExtractedBlock, ExtractedBlockHeader,
+    ExtractedCodeChange, ExtractedSystemCall, ExtractedTransactionTraces, ExtractedWithdrawal,
 };
 
 use crate::structure::ExtractedUncleBlockHeader;
@@ -81,6 +81,36 @@ impl AppConfig {
                     .transaction_traces
                     .into_iter()
                     .map(|t| self.extract_transaction_traces(t))
+                    .collect();
+                Some(extracted)
+            } else {
+                None
+            },
+            balance_changes: if cfg.balance_changes.enabled {
+                let extracted: Vec<ExtractedBalanceChange> = block
+                    .balance_changes
+                    .into_iter()
+                    .map(|b| self.extract_block_balance_change(b))
+                    .collect();
+                Some(extracted)
+            } else {
+                None
+            },
+            code_changes: if cfg.code_changes.enabled {
+                let extracted: Vec<ExtractedCodeChange> = block
+                    .code_changes
+                    .into_iter()
+                    .map(|c| self.extract_block_code_change(c))
+                    .collect();
+                Some(extracted)
+            } else {
+                None
+            },
+            withdrawals: if cfg.withdrawals.enabled {
+                let extracted: Vec<ExtractedWithdrawal> = block
+                    .withdrawals
+                    .into_iter()
+                    .map(|w| self.extract_withdrawal(w))
                     .collect();
                 Some(extracted)
             } else {

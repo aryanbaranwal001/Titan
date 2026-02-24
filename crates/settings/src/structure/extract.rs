@@ -4,7 +4,7 @@ use crate::structure::*;
 use proto_build::sf::ethereum::r#type::v2::{
     AccessTuple, AccountCreation, BalanceChange, BigInt, BlockHeader, Call,
     Call as TransactionTraceCall, CodeChange, GasChange, Log, NonceChange, SetCodeAuthorization,
-    StorageChange, TransactionReceipt, TransactionTrace,
+    StorageChange, TransactionReceipt, TransactionTrace, Withdrawal,
 };
 
 impl AppConfig {
@@ -835,4 +835,59 @@ impl AppConfig {
             authority: if cfg.authority { s.authority } else { None },
         }
     }
+
+    pub fn extract_block_balance_change(&self, b: BalanceChange) -> ExtractedBalanceChange {
+        let cfg = &self.block.balance_changes;
+        ExtractedBalanceChange {
+            address: if cfg.address { Some(b.address) } else { None },
+            old_value: if cfg.old_value { b.old_value } else { None },
+            new_value: if cfg.new_value { b.new_value } else { None },
+            reason: if cfg.reason { Some(b.reason) } else { None },
+            ordinal: if cfg.ordinal { Some(b.ordinal) } else { None },
+        }
+    }
+
+    pub fn extract_block_code_change(&self, cc: CodeChange) -> ExtractedCodeChange {
+        let cfg = &self.block.code_changes;
+        ExtractedCodeChange {
+            address: if cfg.address { Some(cc.address) } else { None },
+            old_hash: if cfg.old_hash {
+                Some(cc.old_hash)
+            } else {
+                None
+            },
+            old_code: if cfg.old_code {
+                Some(cc.old_code)
+            } else {
+                None
+            },
+            new_hash: if cfg.new_hash {
+                Some(cc.new_hash)
+            } else {
+                None
+            },
+            new_code: if cfg.new_code {
+                Some(cc.new_code)
+            } else {
+                None
+            },
+            ordinal: cc.ordinal,
+        }
+    }
+
+    pub fn extract_withdrawal(&self, w: Withdrawal) -> ExtractedWithdrawal {
+        let cfg = &self.block.withdrawals;
+        ExtractedWithdrawal {
+            index: if cfg.index { Some(w.index) } else { None },
+            validator_index: if cfg.validator_index {
+                Some(w.validator_index)
+            } else {
+                None
+            },
+            address: if cfg.address { Some(w.address) } else { None },
+            amount: if cfg.amount { Some(w.amount) } else { None },
+        }
+    }
 }
+
+// enabled is not implemented for all structs, implement those
