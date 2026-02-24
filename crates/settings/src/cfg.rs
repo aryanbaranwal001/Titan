@@ -12,9 +12,9 @@ pub struct BlockCfg {
     pub system_calls: SystemCallCfg,
     pub uncles: UncleBlockHeaderCfg,
     pub transaction_traces: TransactionTraceCfg,
-    // pub balance_changes: BalanceChanges,
-    // pub code_changes: CodeChanges,
-    // pub withdrawals: Withdrawals,
+    pub balance_changes: BalanceChangesCfg,
+    pub code_changes: CodeChangesCfg,
+    pub withdrawals: WithdrawalCfg,
 }
 
 #[derive(Deserialize, Debug, Default)]
@@ -327,8 +327,9 @@ pub struct CodeChanges {
     pub ordinal: bool,
 }
 #[derive(Deserialize, Debug, Default)]
-pub struct Withdrawals {
+pub struct WithdrawalCfg {
     pub enabled: bool,
+
     pub index: bool,
     pub validator_index: bool,
     pub address: bool,
@@ -349,3 +350,6 @@ pub struct BalanceChanges {
     pub reason: bool,
     pub ordinal: bool,
 }
+
+// enabled is not used for many of the inner subfields
+// make sure to fix that
