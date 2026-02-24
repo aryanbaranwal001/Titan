@@ -51,6 +51,33 @@ impl fmt::Display for ExtractedBlock {
             writeln!(f, "  ],")?;
         }
 
+        if let Some(ref balance_changes) = self.balance_changes {
+            writeln!(f, "  balance_changes: [")?;
+            for balance_change in balance_changes {
+                let balance_change_str = format!("  {}", balance_change).replace('\n', "\n  ");
+                writeln!(f, "{},", balance_change_str)?;
+            }
+            writeln!(f, "  ],")?;
+        }
+
+        if let Some(ref code_changes) = self.code_changes {
+            writeln!(f, "  code_changes: [")?;
+            for code_change in code_changes {
+                let code_change_str = format!("  {}", code_change).replace('\n', "\n  ");
+                writeln!(f, "{},", code_change_str)?;
+            }
+            writeln!(f, "  ],")?;
+        }
+
+        if let Some(ref withdrawals) = self.withdrawals {
+            writeln!(f, "  withdrawals: [")?;
+            for withdrawal in withdrawals {
+                let withdrawal_str = format!("  {}", withdrawal).replace('\n', "\n  ");
+                writeln!(f, "{},", withdrawal_str)?;
+            }
+            writeln!(f, "  ],")?;
+        }
+
         write!(f, "}}")
     }
 }
@@ -628,6 +655,25 @@ impl fmt::Display for ExtractedAccountCreations {
         }
         if let Some(v) = self.ordinal {
             writeln!(f, "  ordinal: {},", v)?;
+        }
+        write!(f, "}}")
+    }
+}
+
+impl fmt::Display for ExtractedWithdrawal {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "Withdrawal {{")?;
+        if let Some(ref v) = self.index {
+            writeln!(f, "  index: {},", v)?;
+        }
+        if let Some(ref v) = self.validator_index {
+            writeln!(f, "  validator_index: {},", v)?;
+        }
+        if let Some(ref v) = self.address {
+            writeln!(f, "  address: {:?},", v)?;
+        }
+        if let Some(ref v) = self.amount {
+            writeln!(f, "  amount: {},", v)?;
         }
         write!(f, "}}")
     }
