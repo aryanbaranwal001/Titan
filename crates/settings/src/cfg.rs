@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct BlockCfg {
     pub hash: bool,
     pub number: bool,
@@ -17,7 +17,7 @@ pub struct BlockCfg {
     pub withdrawals: WithdrawalCfg,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct BlockHeaderCfg {
     pub enabled: bool,
 
@@ -47,7 +47,7 @@ pub struct BlockHeaderCfg {
     pub requests_hash: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct SystemCallCfg {
     pub enabled: bool,
 
@@ -80,7 +80,7 @@ pub struct SystemCallCfg {
     pub account_creations: AccountCreationsCfg,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct UncleBlockHeaderCfg {
     pub enabled: bool,
 
@@ -110,7 +110,7 @@ pub struct UncleBlockHeaderCfg {
     pub requests_hash: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct TransactionTraceCfg {
     pub enabled: bool,
 
@@ -145,7 +145,7 @@ pub struct TransactionTraceCfg {
     pub set_code_authorizations: SetCodeAuthorizationCfg,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct WithdrawalCfg {
     pub enabled: bool,
 
@@ -155,7 +155,7 @@ pub struct WithdrawalCfg {
     pub amount: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct StorageChangesCfg {
     pub enabled: bool,
 
@@ -165,7 +165,7 @@ pub struct StorageChangesCfg {
     pub new_value: bool,
     pub ordinal: bool,
 }
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct BalanceChangesCfg {
     pub enabled: bool,
 
@@ -175,7 +175,7 @@ pub struct BalanceChangesCfg {
     pub reason: bool,
     pub ordinal: bool,
 }
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct NonceChangesCfg {
     pub enabled: bool,
 
@@ -185,7 +185,7 @@ pub struct NonceChangesCfg {
     pub ordinal: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct CodeChangesCfg {
     pub enabled: bool,
 
@@ -197,7 +197,7 @@ pub struct CodeChangesCfg {
     pub ordinal: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct GasChangesCfg {
     pub enabled: bool,
 
@@ -207,7 +207,7 @@ pub struct GasChangesCfg {
     pub ordinal: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct AccountCreationsCfg {
     pub enabled: bool,
 
@@ -215,7 +215,7 @@ pub struct AccountCreationsCfg {
     pub ordinal: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct SetCodeAuthorizationCfg {
     pub enabled: bool,
 
@@ -229,7 +229,7 @@ pub struct SetCodeAuthorizationCfg {
     pub authority: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct TracsactionTraceCallCfg {
     pub enabled: bool,
 
@@ -263,7 +263,7 @@ pub struct TracsactionTraceCallCfg {
     pub account_creations: AccountCreationsCfg,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct TransactionReceiptCfg {
     pub enabled: bool,
 
@@ -276,7 +276,7 @@ pub struct TransactionReceiptCfg {
     pub logs: LogCfg,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct LogCfg {
     pub enabled: bool,
 
@@ -288,7 +288,7 @@ pub struct LogCfg {
     pub ordinal: bool,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Debug)]
 pub struct AccessTupleCfg {
     pub enabled: bool,
 
