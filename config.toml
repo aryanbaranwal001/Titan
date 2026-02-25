@@ -1,114 +1,338 @@
 
 [block]
-hash = true          # The unique 32-byte hash identifying the block
-number = true       # The block height (index) in the blockchain
-size = true         # Total size of the block in bytes
-detail_level = true # Enum indicating if data is BASE or EXTENDED (DetailLevel)
-ver = true          # Version of the block data structure
+hash = true
+number = false
+size = false
+detail_level = false
+ver = false
 
-
-# Block Header
+# -------------------------------
+# BlockHeader
+# -------------------------------
 [block.blockheader]
-enabled = true # Toggle entire block header object
+enabled = false
 
-parent_hash = true        # Hash of the previous block
-uncle_hash = true         # Hash of the uncles (ommer) list
-coinbase = true           # Address of the miner/validator
-state_root = true         # Root of the state trie
-transactions_root = true  # Root of the transaction trie
-receipt_root = true       # Root of the transaction receipt trie
-logs_bloom = true         # Bloom filter for log searching
-difficulty = true         # Mining difficulty (BigInt)
-total_difficulty = true   # Cumulative difficulty (BigInt, deprecated)
-number = true             # Duplicate of block height for header context
-gas_limit = true          # Maximum gas allowed in this block
-gas_used = true           # Total gas actually consumed
-timestamp = true          # Unix timestamp (google.protobuf.Timestamp)
-extra_data = true         # Arbitrary data field
-mix_hash = true           # PoW hash or RANDAO
-nonce = true              # Proof-of-work seal
-hash = true               # Block hash (calculated from header)
-base_fee_per_gas = true   # Minimum fee per gas (BigInt, EIP-1559)
-withdrawals_root = true   # Root of the beacon chain withdrawals trie
-tx_dependency = true      # Parallel execution dependency (Uint64NestedArray)
-blob_gas_used = true      # Gas consumed by EIP-4844 blobs
-excess_blob_gas = true    # Running total of unused blob gas capacity
-parent_beacon_root = true # Root of the parent beacon block
-requests_hash = true      # Hash of execution layer requests
+parent_hash = false
+uncle_hash = false
+coinbase = false
+state_root = false
+transactions_root = false
+receipt_root = false
+logs_bloom = false
+difficulty = false
+total_difficulty = false
+number = false
+gas_limit = false
+gas_used = false
+timestamp = false
+extra_data = false
+mix_hash = false
+nonce = false
+hash = false
+base_fee_per_gas = false
+withdrawals_root = false
+tx_dependency = false
+blob_gas_used = false
+excess_blob_gas = false
+parent_beacon_root = false
+requests_hash = false
 
-
-# Block System Calls
+# -------------------------------
+# SystemCalls
+# -------------------------------
 [block.system_calls]
-enabled = true # Toggle internal calls
+enabled = false
 
-index = true                # Call index
-parent_index = true         # Parent call index
-depth = true                # Call stack depth
-call_type = true            # Type (CALL, DELEGATE, CREATE, etc.)
-caller = true               # Address initiating the call
-address = true              # Target address
-address_delegates_to = true # Effective address for DELEGATECALL
-value = true                # Ether sent (BigInt)
-gas_limit = true            # Gas allocated
-gas_consumed = true         # Gas used
-return_data = true          # Data returned
-input = true                # Call data
-executed_code = true        # If code was run
-suicide = true              # If SELFDESTRUCT occurred
-keccak_preimages = true     # Map of hash -> preimage
-status_failed = true        # If execution failed
-status_reverted = true      # If execution reverted
-failure_reason = true       # Error message
-state_reverted = true       # If state changes rolled back
-begin_ordinal = true        # Start order
-end_ordinal = true          # End order
+index = false
+parent_index = false
+depth = false
+call_type = false
+caller = false
+address = false
+address_delegates_to = false
+value = false
+gas_limit = false
+gas_consumed = false
+return_data = false
+input = false
+executed_code = false
+suicide = false
+keccak_preimages = false
+status_failed = false
+status_reverted = false
+failure_reason = false
+state_reverted = false
+begin_ordinal = false
+end_ordinal = false
 
 
 [block.system_calls.storage_changes]
-enabled = true # Toggle storage slot modifications
+enabled = false
 
-address = true   # Address modified
-key = true       # Storage key
-old_value = true # Value before
-new_value = true # Value after
-ordinal = true   # Order
+address = false
+key = false
+old_value = false
+new_value = false
+ordinal = false
 
 [block.system_calls.balance_changes]
-enabled = true # Toggle Ether balance movements (BalanceChange)
+enabled = false
 
-address = true   # Address changed
-old_value = true # BigInt before
-new_value = true # BigInt after
-reason = true    # Reason enum
-ordinal = true   # Order
+address = false
+old_value = false
+new_value = false
+reason = false
+ordinal = false
 
 [block.system_calls.nonce_changes]
-enabled = true # Toggle account nonce updates (NonceChange)
+enabled = false
 
-address = true   # Address changed
-old_value = true # Nonce before
-new_value = true # Nonce after
-ordinal = true   # Order
+address = false
+old_value = false
+new_value = false
+ordinal = false
 
 
 [block.system_calls.code_changes]
-address = true
-old_hash = true
-old_code = true
-new_hash = true
-new_code = true
-ordinal = true
+enabled = false
+
+address = false
+old_hash = false
+old_code = false
+new_hash = false
+new_code = false
+ordinal = false
 
 [block.system_calls.gas_changes]
-enabled = true # Toggle gas consumption details (GasChange)
+enabled = false
 
-old_value = true # Gas before
-new_value = true # Gas after
-reason = true    # Reason enum
-ordinal = true   # Order
+old_value = false
+new_value = false
+reason = false
+ordinal = false
 
 [block.system_calls.account_creations]
+enabled = false
+
+account = false
+ordinal = false
+
+
+# -------------------------------
+# Uncles
+# -------------------------------
+[block.uncles]
+enabled = false
+
+parent_hash = false
+uncle_hash = false
+coinbase = false
+state_root = false
+transactions_root = false
+receipt_root = false
+logs_bloom = false
+difficulty = false
+total_difficulty = false
+number = false
+gas_limit = false
+gas_used = false
+timestamp = false
+extra_data = false
+mix_hash = false
+nonce = false
+hash = false
+base_fee_per_gas = false
+withdrawals_root = false
+tx_dependency = false
+blob_gas_used = false
+excess_blob_gas = false
+parent_beacon_root = false
+requests_hash = false
+
+
+# -------------------------------
+# TransactionTraces
+# -------------------------------
+[block.transaction_traces]
 enabled = true
 
-account = true
-ordinal = true
+to = true
+nonce = false
+gas_price = false
+gas_limit = false
+value = false
+input = false
+v = false
+r = false
+s = false
+gas_used = false
+type = false
+max_fee_per_gas = false
+max_priority_fee_per_gas = false
+index = false
+hash = false
+from = false
+return_data = false
+public_key = false
+begin_ordinal = false
+end_ordinal = false
+status = false
+blob_gas = false
+blob_gas_fee_cap = false
+blob_hashes = false
+
+# TransactionTraces => AccessList
+[block.transaction_traces.access_list]
+enabled = false
+
+address = false
+storage_keys = false
+
+
+# TransactionTraces => Receipt
+[block.transaction_traces.receipt]
+enabled = false
+
+state_root = false
+cumulative_gas_used = false
+logs_bloom = false
+blob_gas_used = false
+blob_gas_price = false
+
+
+[block.transaction_traces.receipt.logs]
+enabled = false
+
+address = false
+topics = false
+data = false
+index = false
+block_index = false
+ordinal = false
+
+
+# TransactionTraces => Calls
+[block.transaction_traces.calls]
+enabled = false
+
+index = false
+parent_index = false
+depth = false
+call_type = false
+caller = false
+address = false
+address_delegates_to = false
+value = false
+gas_limit = false
+gas_consumed = false
+return_data = false
+input = false
+executed_code = false
+suicide = false
+keccak_preimages = false
+status_failed = false
+status_reverted = false
+failure_reason = false
+state_reverted = false
+begin_ordinal = false
+end_ordinal = false
+
+[block.transaction_traces.calls.storage_changes]
+enabled = false
+
+address = false
+key = false
+old_value = false
+new_value = false
+ordinal = false
+
+[block.transaction_traces.calls.balance_changes]
+enabled = false
+
+address = false
+old_value = false
+new_value = false
+reason = false
+ordinal = false
+
+[block.transaction_traces.calls.nonce_changes]
+enabled = false
+
+address = false
+old_value = false
+new_value = false
+ordinal = false
+
+[block.transaction_traces.calls.code_changes]
+enabled = false
+
+address = false
+old_hash = false
+old_code = false
+new_hash = false
+new_code = false
+ordinal = false
+
+[block.transaction_traces.calls.gas_changes]
+enabled = false
+
+old_value = false
+new_value = false
+reason = false
+ordinal = false
+
+[block.transaction_traces.calls.account_creations]
+enabled = false
+
+account = false
+ordinal = false
+
+# TransactionTraces => SetCodeAuthorization
+[block.transaction_traces.set_code_authorizations]
+enabled = false
+
+discarded = false
+chain_id = false
+address = false
+nonce = false
+v = false
+r = false
+s = false
+authority = false
+
+# -------------------------------
+# BalanceChanges
+# -------------------------------
+[block.balance_changes]
+enabled = false
+
+address = false
+old_value = false
+new_value = false
+reason = false
+ordinal = false
+
+
+# -------------------------------
+# CodeChanges
+# -------------------------------
+[block.code_changes]
+enabled = false
+
+address = false
+old_hash = false
+old_code = false
+new_hash = false
+new_code = false
+ordinal = false
+
+# -------------------------------
+# withdrawals
+# -------------------------------
+[block.withdrawals]
+enabled = false
+
+index = false
+validator_index = false
+address = false
+amount = false

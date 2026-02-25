@@ -1,16 +1,16 @@
-#![allow(unused)]
-use cfg::{BlockCfg, BlockHeaderCfg};
+use cfg::BlockCfg;
 use config::{Case, Config, ConfigError, Environment, File};
-use proto_build::sf::ethereum::r#type::v2::{BigInt, Block, BlockHeader, Uint64NestedArray};
-use serde::{Deserialize, Serialize};
+use proto_build::sf::ethereum::r#type::v2::Block;
+use serde::Deserialize;
 use structure::{
-    DetailLevel, ExtractedBalanceChange, ExtractedBlock, ExtractedBlockHeader,
-    ExtractedCodeChange, ExtractedSystemCall, ExtractedTransactionTraces, ExtractedWithdrawal,
+    DetailLevel, ExtractedBalanceChange, ExtractedBlock, ExtractedCodeChange, ExtractedSystemCall,
+    ExtractedTransactionTraces, ExtractedWithdrawal,
 };
 
 use crate::structure::ExtractedUncleBlockHeader;
 pub mod cfg;
 pub mod structure;
+
 // NOTE: Whether the actual blockdata is a BlockHeader or Vec<BlockHeader>,
 // the toggle structure used to select which fields to include
 // remains the same. This toggle determines whether we fetch

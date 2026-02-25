@@ -296,5 +296,5 @@ pub struct AccessTupleCfg {
     pub storage_keys: bool,
 }
 
-// enabled is not used for many of the inner subfields
-// make sure to fix that
+// my todos
+// 1. enabled is not used for many of the inner subfields

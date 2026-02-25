@@ -1,13 +1,7 @@
 #![allow(deprecated)]
 
-use crate::AppConfig;
-use crate::cfg::SystemCallCfg;
 use prost_types::Timestamp;
-use proto_build::sf::ethereum::r#type::v2::{
-    AccessTuple, AccountCreation, BalanceChange, BigInt, Block, BlockHeader,
-    Call as TransactionTraceCall, Call, CodeChange, GasChange, Log, NonceChange,
-    SetCodeAuthorization, StorageChange, TransactionReceipt, TransactionTrace, Uint64NestedArray,
-};
+use proto_build::sf::ethereum::r#type::v2::{BigInt, Uint64NestedArray};
 use serde::Deserialize;
 use std::{collections::HashMap, fmt};
 
@@ -325,4 +319,5 @@ pub enum DetailLevel {
     Extended,
 }
 
-//why the fuck are we even using Deserialize
+// my todos
+// 1. why the fuck are we even using Deserialize
