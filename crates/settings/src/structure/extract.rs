@@ -892,3 +892,4 @@ impl AppConfig {
 
 // my todos
 // 1. enabled is not implemented for all structs, implement those
+// 2. check if its implemented for all structs
