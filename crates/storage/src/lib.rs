@@ -1,14 +1,17 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
+#![allow(unused)]
+use clickhouse::Client;
+
+pub struct ClickhouseClient {
+    client: Client,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+impl ClickhouseClient {
+    pub fn new(url: &str, database: &str, user: &str, password: &str) -> Self {
+        let client = Client::default()
+            .with_url(url)
+            .with_database(database)
+            .with_user(user)
+            .with_password(password);
+        Self { client }
     }
 }
