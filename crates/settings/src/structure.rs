@@ -8,13 +8,13 @@ use proto_build::sf::ethereum::r#type::v2::{
     Call as TransactionTraceCall, Call, CodeChange, GasChange, Log, NonceChange,
     SetCodeAuthorization, StorageChange, TransactionReceipt, TransactionTrace, Uint64NestedArray,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt};
 
 pub mod extract;
 pub mod format;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedBlock {
     pub hash: Option<Vec<u8>>,
     pub number: Option<u64>,
@@ -30,7 +30,7 @@ pub struct ExtractedBlock {
     pub withdrawals: Option<Vec<ExtractedWithdrawal>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedWithdrawal {
     pub index: Option<u64>,
     pub validator_index: Option<u64>,
@@ -38,7 +38,7 @@ pub struct ExtractedWithdrawal {
     pub amount: Option<u64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedBlockHeader {
     pub parent_hash: Option<Vec<u8>>,
     pub uncle_hash: Option<Vec<u8>>,
@@ -68,7 +68,7 @@ pub struct ExtractedBlockHeader {
     pub requests_hash: Option<Vec<u8>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedTransactionTraces {
     pub to: Option<Vec<u8>>,
     pub nonce: Option<u64>,
@@ -101,7 +101,7 @@ pub struct ExtractedTransactionTraces {
     pub set_code_authorizations: Option<Vec<ExtractedSetCodeAuthorization>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedSetCodeAuthorization {
     pub discarded: Option<bool>,
     pub chain_id: Option<Vec<u8>>,
@@ -113,7 +113,7 @@ pub struct ExtractedSetCodeAuthorization {
     pub authority: Option<Vec<u8>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedTracsactionTraceCall {
     pub index: Option<u32>,
     pub parent_index: Option<u32>,
@@ -144,7 +144,7 @@ pub struct ExtractedTracsactionTraceCall {
     pub account_creations: Option<Vec<ExtractedAccountCreations>>,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Serialize, Debug, Default)]
 pub struct ExtractedTransactionReceipt {
     pub state_root: Option<Vec<u8>>,
     pub cumulative_gas_used: Option<u64>,
@@ -154,7 +154,7 @@ pub struct ExtractedTransactionReceipt {
     pub blob_gas_price: Option<BigInt>,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Serialize, Debug, Default)]
 pub struct ExtractedLog {
     pub address: Option<Vec<u8>>,
     pub topics: Option<Vec<Vec<u8>>>,
@@ -164,13 +164,13 @@ pub struct ExtractedLog {
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize, Debug, Default)]
+#[derive(Deserialize, Serialize, Debug, Default)]
 pub struct ExtractedAccessTuple {
     pub address: Option<Vec<u8>>,
     pub storage_keys: Option<Vec<Vec<u8>>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedUncleBlockHeader {
     pub parent_hash: Option<Vec<u8>>,
     pub uncle_hash: Option<Vec<u8>>,
@@ -200,7 +200,7 @@ pub struct ExtractedUncleBlockHeader {
     pub requests_hash: Option<Vec<u8>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedSystemCall {
     pub index: Option<u32>,
     pub parent_index: Option<u32>,
@@ -231,7 +231,7 @@ pub struct ExtractedSystemCall {
     pub account_creations: Option<Vec<ExtractedAccountCreations>>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedCodeChange {
     pub address: Option<Vec<u8>>,
     pub old_hash: Option<Vec<u8>>,
@@ -241,7 +241,7 @@ pub struct ExtractedCodeChange {
     pub ordinal: u64,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedGasChange {
     pub old_value: Option<u64>,
     pub new_value: Option<u64>,
@@ -249,13 +249,13 @@ pub struct ExtractedGasChange {
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedAccountCreations {
     pub account: Option<Vec<u8>>,
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedStorageChange {
     pub address: Option<Vec<u8>>,
     pub key: Option<Vec<u8>>,
@@ -264,7 +264,7 @@ pub struct ExtractedStorageChange {
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedBalanceChange {
     pub address: Option<Vec<u8>>,
     pub old_value: Option<BigInt>,
@@ -273,7 +273,7 @@ pub struct ExtractedBalanceChange {
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct ExtractedNonceChange {
     pub address: Option<Vec<u8>>,
     pub old_value: Option<BigInt>,
@@ -281,7 +281,7 @@ pub struct ExtractedNonceChange {
     pub ordinal: Option<u64>,
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Serialize)]
 #[serde(remote = "prost_types::Timestamp")]
 pub struct TimestampDef {
     pub seconds: i64,
@@ -291,27 +291,26 @@ pub struct TimestampDef {
 // task: replace this boilderplate code with serde_with trait implementation
 pub mod option_timestamp {
     use super::TimestampDef;
-    // use serde::{Deserialize, Deserializer, Serialize, Serializer};
-    use serde::{Deserialize, Deserializer};
+    use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-    // pub fn serialize<S>(
-    //     value: &Option<prost_types::Timestamp>,
-    //     serializer: S,
-    // ) -> Result<S::Ok, S::Error>
-    // where
-    //     S: Serializer,
-    // {
-    //     #[derive(Serialize)]
-    //     struct Helper<'a>(#[serde(with = "TimestampDef")] &'a prost_types::Timestamp);
-    //
-    //     value.as_ref().map(Helper).serialize(serializer)
-    // }
+    pub fn serialize<S>(
+        value: &Option<prost_types::Timestamp>,
+        serializer: S,
+    ) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        #[derive(Serialize)]
+        struct Helper<'a>(#[serde(with = "TimestampDef")] &'a prost_types::Timestamp);
+
+        value.as_ref().map(Helper).serialize(serializer)
+    }
 
     pub fn deserialize<'de, D>(deserializer: D) -> Result<Option<prost_types::Timestamp>, D::Error>
     where
         D: Deserializer<'de>,
     {
-        #[derive(Deserialize)]
+        #[derive(Deserialize, Serialize)]
         struct Helper(#[serde(with = "TimestampDef")] prost_types::Timestamp);
 
         let helper = Option::<Helper>::deserialize(deserializer)?;
@@ -319,10 +318,8 @@ pub mod option_timestamp {
     }
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub enum DetailLevel {
     Base,
     Extended,
 }
-
-//why the fuck are we even using Deserialize
