@@ -1,0 +1,6 @@
+# "source" = "target"
+[mappings]
+"/number" = "block_number"
+"/hash" = "block_hash"
+"/blockheader/gas_used" = "gas_used"
+"/transaction_traces/0/hash" = "first_tx_hash"

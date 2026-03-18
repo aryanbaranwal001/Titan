@@ -1,7 +1,12 @@
 
+
+start_block = 24_000_001
+end_block = 24_000_005
+
+
 [block]
 hash = true          # The unique 32-byte hash identifying the block
-number = false       # The block height (index) in the blockchain
+number = true        # The block height (index) in the blockchain
 size = false         # Total size of the block in bytes
 detail_level = false # Enum indicating if data is BASE or EXTENDED (DetailLevel)
 ver = false          # Version of the block data structure
