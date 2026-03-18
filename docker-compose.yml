@@ -1,0 +1,18 @@
+services:
+  clickhouse:
+    image: clickhouse:lts-jammy
+    ports:
+      - "8123:8123"
+    environment:
+      CLICKHOUSE_DB: users_db
+      CLICKHOUSE_USER: user
+      CLICKHOUSE_PASSWORD: "admin"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+
+volumes:
+  clickhouse_data:
+
+# 1. healthcheck
+# 2. use port 9000 for real production usage (faster)
+# 3. use multistage build process for making final binary and use that using docker
