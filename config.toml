@@ -14,7 +14,7 @@ ver = false          # Version of the block data structure
 
 # Block Header
 [block.blockheader]
-enabled = false # Toggle entire block header object
+enabled = true # Toggle entire block header object
 
 parent_hash = false        # Hash of the previous block
 uncle_hash = false         # Hash of the uncles (ommer) list
@@ -27,7 +27,7 @@ difficulty = false         # Mining difficulty (BigInt)
 total_difficulty = false   # Cumulative difficulty (BigInt, deprecated)
 number = false             # Duplicate of block height for header context
 gas_limit = false          # Maximum gas allowed in this block
-gas_used = false           # Total gas actually consumed
+gas_used = true            # Total gas actually consumed
 timestamp = false          # Unix timestamp (google.protobuf.Timestamp)
 extra_data = false         # Arbitrary data field
 mix_hash = false           # PoW hash or RANDAO
@@ -117,3 +117,32 @@ enabled = false
 
 account = false
 ordinal = false
+
+
+[block.transaction_traces]
+enabled = true
+
+to = false
+nonce = false
+gas_price = false
+gas_limit = false
+value = false
+input = false
+v = false
+r = false
+s = false
+gas_used = false
+type = false
+max_fee_per_gas = false
+max_priority_fee_per_gas = false
+index = false
+hash = true
+from = false
+return_data = false
+public_key = false
+begin_ordinal = false
+end_ordinal = false
+status = false
+blob_gas = false
+blob_gas_fee_cap = false
+blob_hashes = false

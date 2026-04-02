@@ -1,5 +1,3 @@
 /target
 .env
-cli
 data.txt
-blocks.bin
