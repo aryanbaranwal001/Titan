@@ -61,7 +61,7 @@ fn format_sql_value(value: &Value) -> String {
 
         Value::Array(arr) => {
             let is_byte_array =
-                !arr.is_empty() && arr.iter().all(|v| v.as_u64().map_or(false, |n| n <= 255));
+                !arr.is_empty() && arr.iter().all(|v| v.as_u64().is_some_and(|n| n <= 255));
 
             if is_byte_array {
                 let hex_str: String = arr
